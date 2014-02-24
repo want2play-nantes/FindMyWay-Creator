@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=0.0.1
+Type=Application
+Name=EasyPaint
+GenericName=Image Editor
+GenericName[fr]=Éditeur d'image
+Comment=Create images and edit photographs
+Comment[fr]=Créer des images et modifier des photographies
+Exec=easypaint %F
+TryExec=easypaint
+Icon=easypaint_64
+Terminal=false
+Categories=Graphics;2DGraphics;RasterGraphics;Qt;
+StartupNotify=true
+MimeType=image/bmp;image/gif;image/x-fits;image/pcx;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-psd;image/x-sgi;image/x-tga;image/x-xbitmap;image/x-xwindowdump;image/x-xcf;image/x-compressed-xcf;image/tiff;image/jpeg;image/png;image/x-xpixmap;
+Name[fr_FR]=findmyway.desktop
