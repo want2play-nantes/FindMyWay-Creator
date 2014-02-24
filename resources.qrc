@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/">
+        <file>media/instruments-icons/cursor.png</file>
+        <file>media/instruments-icons/ellipse.png</file>
+        <file>media/instruments-icons/line.png</file>
+        <file>media/instruments-icons/loupe.png</file>
+        <file>media/instruments-icons/rectangle.png</file>
+        <file>media/instruments-icons/cursor_loupe.png</file>
+        <file>media/actions-icons/application-exit.png</file>
+        <file>media/actions-icons/document-new.png</file>
+        <file>media/actions-icons/document-open.png</file>
+        <file>media/actions-icons/document-properties.png</file>
+        <file>media/actions-icons/document-save-as.png</file>
+        <file>media/actions-icons/document-save.png</file>
+        <file>media/actions-icons/edit-copy.png</file>
+        <file>media/actions-icons/edit-cut.png</file>
+        <file>media/actions-icons/edit-paste.png</file>
+        <file>media/actions-icons/edit-redo.png</file>
+        <file>media/actions-icons/edit-undo.png</file>
+        <file>media/actions-icons/help-about.png</file>
+        <file>media/actions-icons/object-rotate-left.png</file>
+        <file>media/actions-icons/object-rotate-right.png</file>
+        <file>media/actions-icons/window-close.png</file>
+        <file>media/actions-icons/zoom-in.png</file>
+        <file>media/actions-icons/zoom-out.png</file>
+        <file>media/actions-icons/clear-gray.png</file>
+    </qresource>
+    <qresource prefix="/logos">
+        <file>logos/escalier.png</file>
+        <file>logos/porte.png</file>
+        <file>logos/portePrin.png</file>
+        <file>logos/salle.png</file>
+    </qresource>
+</RCC>
