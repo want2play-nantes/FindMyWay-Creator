@@ -7,7 +7,7 @@ DragWidget::DragWidget(QWidget *parent)
 {
 #if defined(Q_OS_SYMBIAN) || defined(Q_WS_MAEMO_5) || defined(Q_WS_SIMULATOR)
 #else
-    //setMinimumSize(100, 500);
+    //setMinimumSize(150, 500);
 #endif
     //setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     setAcceptDrops(false);

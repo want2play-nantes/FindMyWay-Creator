@@ -6,6 +6,7 @@
 #include "datasingleton.h"
 #include "dialogs/settingsdialog.h"
 #include "dialogs/textdialog.h"
+#include "ui_mainwindow.h"
 
 #include <QApplication>
 #include <QAction>
@@ -25,12 +26,17 @@
 
 
 MainWindow::MainWindow(QStringList filePaths, QWidget *parent)
-    : QMainWindow(parent), mPrevInstrumentSetted(false)
+    : QMainWindow(parent), mPrevInstrumentSetted(false), ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
     QSize winSize = DataSingleton::Instance()->getWindowSize();
     if (DataSingleton::Instance()->getIsRestoreWindowSize() &&  winSize.isValid()) {
         resize(winSize);
     }
+
+
+
+    // Nous creons l'instance de dialogue que nous voulons afficher
 
     setWindowIcon(QIcon(":/media/logo/FindMyWAy.png"));
 
@@ -79,7 +85,9 @@ void MainWindow::initializeTabWidget()
     connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
     connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(enableActions(int)));
     connect(mTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
-    setCentralWidget(mTabWidget);
+    //setCentralWidget(mTabWidget);
+    ui->scrollArea->setWidget(mTabWidget);
+
 }
 
 void MainWindow::initializeNewTab(const bool &isOpen, const QString &filePath)
@@ -348,51 +356,110 @@ void MainWindow::initializeToolBar()
 }
 
 void MainWindow::initilizeSession(){
-    mSession = new QTreeView(this) ;
-    treeView = new liste_graphe(mSession);
-    //mSession2->addWidget(treeView);
-    //mSession2->set
+
+    treeView = new liste_graphe(ui->treeView);
+
     treeView->setObjectName(QString::fromUtf8("treeView"));
     treeView->setStyleSheet(QString::fromUtf8("border:none;"));
+
+    // mSession->addWidget(treeView);
+    //addWidget(treeView);
+    //mSession->addItem(treeView);
+    //treeView->setObjectName(QString::fromUtf8("treeView"));
+    //treeView->setStyleSheet(QString::fromUtf8("border:none;"));
     //addToolBar(Qt::LeftToolBarArea,mSession2);
-//visu = new visu_graphe;
-//slot signe
-//connect(mSession,SIGNAL(item_selected(QStandardItem*,QStandardItem*)),this,SLOT(on_liste_item_triggered(QStandardItem*,QStandardItem*)));
+    //visu = new visu_graphe;
+    //slot signe
+    //connect(mSession,SIGNAL(item_selected(QStandardItem*,QStandardItem*)),this,SLOT(on_liste_item_triggered(QStandardItem*,QStandardItem*)));
 }
 
 
 void MainWindow::initializeDragbalWidget()
 {
-    drg = new DragWidget(this);
+    this->setAcceptDrops(true);
+    drg1 = new DragWidget(this);
+    drg2 = new DragWidget(this);
+    drg3 = new DragWidget(this);
+    drg4 = new DragWidget(this);
+    drg5 = new DragWidget(this);
+
     QLabel *boatIcon = new QLabel(this);
-    boatIcon->setPixmap(QPixmap(":/logos/logos/escalier.png"));
-    boatIcon->move(10, 50);
+    boatIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    boatIcon->move(0, 50);
     boatIcon->show();
     boatIcon->setAttribute(Qt::WA_DeleteOnClose);
 
+    QLabel *boatIcontext = new QLabel(this);
+    boatIcontext->show();
+    boatIcontext->move(0, 50);
+    boatIcontext->setText("salle");
+
     QLabel *carIcon = new QLabel(this);
-    carIcon->setPixmap(QPixmap(":/logos/logos/porte.png"));
-    carIcon->move(10, 100);
+    carIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    carIcon->move(0, 60);
     carIcon->show();
     carIcon->setAttribute(Qt::WA_DeleteOnClose);
 
+
+    QLabel *boatIcontext2 = new QLabel(this);
+    boatIcontext2->show();
+    boatIcontext2->move(0, 50);
+    boatIcontext2->setText("escalier");
+
     QLabel *houseIcon = new QLabel(this);
-    houseIcon->setPixmap(QPixmap(":/logos/logos/portePrin.png"));
-    houseIcon->move(10, 150);
+    houseIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    houseIcon->move(0, 150);
     houseIcon->show();
     houseIcon->setAttribute(Qt::WA_DeleteOnClose);
 
+    QLabel *boatIcontext3 = new QLabel(this);
+    boatIcontext3->show();
+    boatIcontext3->move(0, 150);
+    boatIcontext3->setText("porte");
+
     QLabel *houseIcon2 = new QLabel(this);
     houseIcon2->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    houseIcon2->move(10, 200);
+    houseIcon2->move(0, 200);
     houseIcon2->show();
     houseIcon2->setAttribute(Qt::WA_DeleteOnClose);
-    drg->addWidget(houseIcon2);
-    drg->addWidget(carIcon);
-    drg->addWidget(boatIcon);
-    drg->addWidget(houseIcon);
 
-    addToolBar(Qt::RightToolBarArea, drg);
+    QLabel *boatIcontext4 = new QLabel(this);
+    boatIcontext4->show();
+    boatIcontext4->move(0, 200);
+    boatIcontext4->setText("fenetre");
+
+    QLabel *houseIcon3 = new QLabel(this);
+    houseIcon3->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    houseIcon3->move(0, 200);
+    houseIcon3->show();
+    houseIcon3->setAttribute(Qt::WA_DeleteOnClose);
+
+    QLabel *boatIcontext5 = new QLabel(this);
+    boatIcontext5->show();
+    boatIcontext5->move(0, 200);
+    boatIcontext5->setText("porte principale");
+
+
+
+
+    drg1->addWidget(boatIcon);
+    drg1->addWidget(boatIcontext);
+    ui->verticalLayout1->addWidget(drg1);
+    drg2->addWidget(carIcon);
+    drg2->addWidget(boatIcontext2);
+    ui->verticalLayout_2->addWidget(drg2);
+    drg3->addWidget(houseIcon);
+    drg3->addWidget(boatIcontext3);
+    ui->verticalLayout_3->addWidget(drg3);
+    drg4->addWidget(houseIcon2);
+    drg4->addWidget(boatIcontext4);
+    ui->verticalLayout_4->addWidget(drg4);
+    drg5->addWidget(houseIcon3);
+    drg5->addWidget(boatIcontext5);
+    ui->verticalLayout_5->addWidget(drg5);
+
+   // ui->verticalLayout->addWidget(drg);
+  // addToolBar(Qt::RightToolBarArea, drg);
 
 }
 ImageArea* MainWindow::getCurrentImageArea()
@@ -463,7 +530,10 @@ void MainWindow::clearStatusBarColor()
 
 void MainWindow::newAct()
 {
-
+    getCurrentImageArea()->save();
+    mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ?
+                               tr("Untitled Image") : getCurrentImageArea()->getFileName() );
+    treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
     initializeNewTab();
 }
 

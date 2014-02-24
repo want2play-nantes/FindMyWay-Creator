@@ -7,6 +7,7 @@
 #include "instruments/dragwidget.h"
 #include <QWidget>
 #include <QImage>
+#include <QFrame>
 
 
 QT_BEGIN_NAMESPACE
@@ -129,10 +130,14 @@ private slots:
     void autoSave();
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
+    //void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 
 

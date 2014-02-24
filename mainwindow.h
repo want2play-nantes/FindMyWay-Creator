@@ -23,7 +23,9 @@ class QUndoGroup;
 class QTreeView;
 
 QT_END_NAMESPACE
-
+namespace Ui {
+class MainWindow;
+}
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -42,6 +44,7 @@ private:
     void initializeTabWidget();
     void initializeDragbalWidget();
     void initilizeSession();
+    Ui::MainWindow *ui;
 
     void initializeNewTab(const bool &isOpen = false, const QString &filePath = "");
 
@@ -55,10 +58,10 @@ private:
 
     QStatusBar *mStatusBar;
     QTabWidget *mTabWidget;
-    ToolBar *mToolbar, *mDragLabel,*mSession2;
+    ToolBar *mToolbar, *mDragLabel;
     QTreeView *mSession;
-    QLayout *mlayout;
-    DragWidget *drg;
+    QLayout *mlayout,*mprincipale;
+    DragWidget *drg1,*drg2,*drg3,*drg4,*drg5;
     PaletteBar *mPaletteBar;
     QLabel *mSizeLabel, *mPosLabel,*mColorPreviewLabel, *mColorRGBLabel;
 
@@ -70,7 +73,7 @@ private:
     QUndoGroup *mUndoStackGroup;
     QHBoxLayout *horizontalLayout;
     liste_graphe *treeView;
-   // visu_graphe * visu;
+
     bool mPrevInstrumentSetted; /**< Used for magnifier */
 private slots:
     void activateTab(const int &index);

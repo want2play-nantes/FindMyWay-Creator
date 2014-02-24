@@ -26,9 +26,6 @@
         <file>media/actions-icons/clear-gray.png</file>
     </qresource>
     <qresource prefix="/logos">
-        <file>logos/escalier.png</file>
-        <file>logos/porte.png</file>
-        <file>logos/portePrin.png</file>
         <file>logos/salle.png</file>
     </qresource>
 </RCC>

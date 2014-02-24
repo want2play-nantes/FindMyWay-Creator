@@ -27,10 +27,14 @@
 #include <QtCore/QDir>
 #include <QMessageBox>
 #include <QClipboard>
-
+#include <QMimeData>
+#include <QDrag>
 ImageArea::ImageArea(const bool &isOpen, const QString &filePath, QWidget *parent) :
     QWidget(parent), mIsEdited(false), mIsPaint(false), mIsResize(false)
 {
+    //setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
+    setAcceptDrops(true);
+       dr = new DragWidget(this);
     setMouseTracking(true);
 
     mRightButtonPressed = false;
@@ -38,7 +42,7 @@ ImageArea::ImageArea(const bool &isOpen, const QString &filePath, QWidget *paren
     makeFormatsFilters();
     initializeImage();
     mZoomFactor = 1;
-    dr = new DragWidget(this);
+
     setAcceptDrops(true);
     mAdditionalTools = new AdditionalTools(this, this->parent());
 
@@ -354,24 +358,6 @@ void ImageArea::paintEvent(QPaintEvent *event)
     painter->end();
 }
 
-void ImageArea::mousePressEvent(QMouseEvent *event)
-{
-
-    if(event->button() == Qt::LeftButton &&
-            event->pos().x() < mImage->rect().right() + 6 &&
-            event->pos().x() > mImage->rect().right() &&
-            event->pos().y() > mImage->rect().bottom() &&
-            event->pos().y() < mImage->rect().bottom() + 6)
-    {
-        mIsResize = true;
-        setCursor(Qt::SizeFDiagCursor);
-    }
-    else if(DataSingleton::Instance()->getInstrument() != NONE_INSTRUMENT)
-    {
-        mInstrumentHandler = mInstrumentsHandlers.at(DataSingleton::Instance()->getInstrument());
-        mInstrumentHandler->mousePressEvent(event, *this);
-    }
-}
 
 
 
@@ -534,3 +520,113 @@ void ImageArea::pushUndoCommand(UndoCommand *command)
     if(command != 0)
         mUndoStack->push(command);
 }
+
+
+void ImageArea::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        if (event->source() == this) {
+            event->setDropAction(Qt::MoveAction);
+            event->accept();
+        } else {
+            event->acceptProposedAction();
+        }
+    } else {
+        event->ignore();
+    }
+}
+
+void ImageArea::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        if (event->source() == this) {
+            event->setDropAction(Qt::MoveAction);
+            event->accept();
+        } else {
+            event->acceptProposedAction();
+        }
+    } else {
+        event->ignore();
+    }
+}
+
+void ImageArea::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
+        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+
+        QPixmap pixmap;
+        QPoint offset;
+        dataStream >> pixmap >> offset;
+
+        QLabel *newIcon = new QLabel(this);
+        newIcon->setPixmap(pixmap);
+        newIcon->move(event->pos() - offset);
+        newIcon->show();
+        newIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+        if (event->source() == this) {
+            event->setDropAction(Qt::MoveAction);
+            event->accept();
+        } else {
+            event->acceptProposedAction();
+        }
+    } else {
+        event->ignore();
+    }
+}
+
+void ImageArea::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton &&
+            event->pos().x() < mImage->rect().right() + 6 &&
+            event->pos().x() > mImage->rect().right() &&
+            event->pos().y() > mImage->rect().bottom() &&
+            event->pos().y() < mImage->rect().bottom() + 6)
+    {
+        mIsResize = true;
+        setCursor(Qt::SizeFDiagCursor);
+    }
+    else if(DataSingleton::Instance()->getInstrument() != NONE_INSTRUMENT)
+    {
+        mInstrumentHandler = mInstrumentsHandlers.at(DataSingleton::Instance()->getInstrument());
+        mInstrumentHandler->mousePressEvent(event, *this);
+    }
+    QLabel *child = static_cast<QLabel*>(childAt(event->pos()));
+    if (!child)
+        return;
+
+    QPixmap pixmap = *child->pixmap();
+
+    QByteArray itemData;
+    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+    dataStream << pixmap << QPoint(event->pos() - child->pos());
+
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("application/x-dnditemdata", itemData);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(event->pos() - child->pos());
+
+    QPixmap tempPixmap = pixmap;
+    QPainter painter;
+    painter.begin(&tempPixmap);
+    painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127));
+    painter.end();
+
+    child->setPixmap(tempPixmap);
+
+    if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction)
+        child->close();
+    else {
+        child->show();
+        child->setPixmap(pixmap);
+    }
+
+
+}
+
+

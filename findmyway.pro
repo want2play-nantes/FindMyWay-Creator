@@ -73,7 +73,6 @@ HEADERS  += mainwindow.h \
     instruments/dragwidget.h \
     widgets/liste_graphe.h
 
-
 RESOURCES += \
     resources.qrc
 
@@ -100,6 +99,9 @@ isEmpty(TS_DIR) {
 ;QMAKE_EXTRA_COMPILERS += TSQM
 ;PRE_TARGETDEPS += compiler_TSQM_make_all
 INSTALLS += target translations desktop icon
+
+FORMS += \
+    mainwindow.ui
 
 
 
