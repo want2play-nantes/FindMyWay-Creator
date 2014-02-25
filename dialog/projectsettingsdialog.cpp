@@ -82,3 +82,4 @@ void ProjectSettingsDialog::on_browseButton_released()
     mapPath = QFileDialog::getOpenFileName(this, tr("Ouvrir le plan assosié au fichier"),"./",tr("Images (*.png *.jpg *.jpeg)"));
     ui->mapPath->setText(this->mapPath);
 }
+

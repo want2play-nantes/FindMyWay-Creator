@@ -39,6 +39,7 @@ private slots:
 
     void on_browseButton_released();
 
+
 private:
     Ui::ProjectSettingsDialog *ui;
 
