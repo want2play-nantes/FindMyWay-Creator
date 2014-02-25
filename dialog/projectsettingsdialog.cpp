@@ -79,7 +79,16 @@ void ProjectSettingsDialog::on_floor_valueChanged(int value)
 
 void ProjectSettingsDialog::on_browseButton_released()
 {
-    mapPath = QFileDialog::getOpenFileName(this, tr("Ouvrir le plan assosié au fichier"),"./",tr("Images (*.png *.jpg *.jpeg)"));
-    ui->mapPath->setText(this->mapPath);
+    QFileDialog dialog(this, tr("Ouvrir le plan assosié au fichier"), QDir::home().absolutePath(),tr("Images (*.png *.jpg *.jpeg)"));
+
+    if (imagePath.exec())
+    {
+        QStringList selectedFiles = dialog.selectedFiles();
+        if (!selectedFiles.isEmpty())
+        {
+            mapPath = selectedFiles.takeFirst();
+            ui->mapPath->setText(this->mapPath);
+        }
+    }
 }
 

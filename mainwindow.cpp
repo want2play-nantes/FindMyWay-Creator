@@ -39,19 +39,6 @@ MainWindow::MainWindow(QStringList filePaths, QWidget *parent) : QMainWindow(par
 
     horizontalLayout = new QHBoxLayout;
 
-
-    if(filePaths.isEmpty())
-    {
-        initializeNewTab();
-    }
-    else
-    {
-        for(int i(0); i < filePaths.size(); i++)
-        {
-            initializeNewTab(true, filePaths.at(i));
-        }
-    }
-
     setCentralWidget(this->centralWidget());
 }
 
@@ -62,30 +49,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeTabWidget()
 {
-    mTabWidget = new QTabWidget();
+    ui->tabWidget->setUsesScrollButtons(true);
+    ui->tabWidget->setTabsClosable(true);
 
-    mTabWidget->setUsesScrollButtons(true);
-    mTabWidget->setTabsClosable(true);
+    ui->tabWidget->setMovable(true);
+    ui->tabWidget->setAcceptDrops(true);
 
-    mTabWidget->setMovable(true);
-    mTabWidget->setAcceptDrops(true);
-
-    connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
-    connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(enableActions(int)));
-    connect(mTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(enableActions(int)));
+    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
     ui->scrollArea->setWidget(mTabWidget);
 
 }
 
-void MainWindow::initializeNewTab(const bool &isOpen, const QString &filePath)
+void MainWindow::initializeNewTab(const QString &filePath)
 {
     if (filePath.isEmpty())
         return;
 
     QString tabName(tr("Untitled Image"));
 
-    ImageArea *imageArea = new ImageArea(isOpen, filePath, this);
+    ImageArea *imageArea = new ImageArea(filePath, this);
     tabName = imageArea->getFileName();
 
     QScrollArea * scrollArea = new QScrollArea();
@@ -361,19 +346,16 @@ void MainWindow::newAct()
 
     ProjectSettingsDialog projectSettingsDialog(this);
 
-    if (projectSettingsDialog.exec() == QDialog::Accepted) {
-        //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-        //treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
-        //initializeNewTab();
+    if (projectSettingsDialog.exec() == QDialog::Accepted)
+    {
+        initializeNewTab(projectSettingsDialog.getMapPath());
 
-        QMessageBox msgBox;
-        msgBox.setText("Création d'un nouveau fichier avec les informations entrées.");
-        msgBox.exec();
-    }
-    else {
-        QMessageBox msgBox;
-        msgBox.setText("Création annulée.");
-        msgBox.exec();
+        //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
+        treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
+
+        //QMessageBox msgBox;
+        //msgBox.setText("Création d'un nouveau fichier avec les informations entrées.");
+        //msgBox.exec();
     }
 }
 
@@ -383,7 +365,7 @@ void MainWindow::openAct()
      * Chargement de l'objet Map
      */
 
-    initializeNewTab(true);
+    //initializeNewTab(true);
 }
 
 void MainWindow::saveAct()

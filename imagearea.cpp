@@ -20,12 +20,12 @@
 #include <QClipboard>
 #include <QMimeData>
 #include <QDrag>
-ImageArea::ImageArea(const bool &isOpen, const QString &filePath, QWidget *parent) :
+ImageArea::ImageArea(const QString &filePath, QWidget *parent) :
     QWidget(parent), mIsEdited(false), mIsPaint(false), mIsResize(false)
 {
     //setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     setAcceptDrops(true);
-       dr = new DragWidget(this);
+    dr = new DragWidget(this);
     setMouseTracking(true);
 
     mRightButtonPressed = false;
@@ -38,29 +38,20 @@ ImageArea::ImageArea(const bool &isOpen, const QString &filePath, QWidget *paren
 
     mZoomedFactor = 1;
 
-    if(isOpen && filePath.isEmpty())
-    {
-        open();
-    }
-    else if(isOpen && !filePath.isEmpty())
-    {
-        open(filePath);
-    }
-    else
-    {
-        QPainter *painter = new QPainter(mImage);
-        painter->fillRect(0, 0, mImage->width(), mImage->height(), Qt::white);
-        painter->end();
+    QPainter *painter = new QPainter(mImage);
+    painter->fillRect(0, 0, mImage->width(), mImage->height(), Qt::white);
+    painter->end();
 
-        resize(mImage->rect().right() + 6, mImage->rect().bottom() + 6);
-        mFilePath = QString(""); // empty name indicate that user has accepted tab creation
-    }
+    resize(mImage->rect().right() + 6, mImage->rect().bottom() + 6);
+    mFilePath = QString(""); // empty name indicate that user has accepted tab creation
 
     QTimer *autoSaveTimer = new QTimer(this);
     autoSaveTimer->setInterval(300000);
     connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSave()));
 
     autoSaveTimer->start();
+
+    open(filePath);
 }
 
 ImageArea::~ImageArea()
@@ -94,11 +85,10 @@ void ImageArea::open()
     }
 }
 
-
-
 void ImageArea::open(const QString &filePath)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
+
     if(mImage->load(filePath))
     {
         *mImage = mImage->convertToFormat(QImage::Format_ARGB32_Premultiplied);

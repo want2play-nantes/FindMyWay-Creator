@@ -40,7 +40,7 @@ private:
     void initializeDragbalWidget();
     void initilizeSession();
 
-    void initializeNewTab(const bool &isOpen = false, const QString &filePath = "");
+    void initializeNewTab(const QString &filePath = "");
 
     Ui::MainWindow *ui;
 
