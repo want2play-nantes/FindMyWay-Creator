@@ -2,7 +2,7 @@
 #ifndef IMAGEAREA_H
 #define IMAGEAREA_H
 
-#include "instruments/dragwidget.h"
+#include "widgets/dragwidget.h"
 #include <QWidget>
 #include <QImage>
 #include <QFrame>

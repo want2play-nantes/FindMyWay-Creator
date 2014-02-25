@@ -23,14 +23,14 @@ UI_DIR = build
 SOURCES += main.cpp\
         mainwindow.cpp \
     imagearea.cpp \
-    instruments/dragwidget.cpp \
+    widgets/dragwidget.cpp \
     widgets/listgraph.cpp \
     dialog/projectsettingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     easypaintenums.h \
     imagearea.h \
-    instruments/dragwidget.h \
+    widgets/dragwidget.h \
     widgets/listgraph.h \
     dialog/projectsettingsdialog.h
 

@@ -7,7 +7,7 @@
 #include <QtCore/QMap>
 #include <QHBoxLayout>
 #include <QGraphicsView>
-#include "instruments/dragwidget.h"
+#include "widgets/dragwidget.h"
 #include "widgets/listgraph.h"
 
 QT_BEGIN_NAMESPACE

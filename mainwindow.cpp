@@ -14,7 +14,7 @@
 #include <QInputDialog>
 #include <QtCore/QTimer>
 #include <QtCore/QMap>
-#include "instruments/dragwidget.h"
+#include "widgets/dragwidget.h"
 #include "dialog/projectsettingsdialog.h"
 
 

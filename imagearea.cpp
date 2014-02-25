@@ -1,8 +1,7 @@
 
 #include "imagearea.h"
 
-#include "dialogs/resizedialog.h"
-#include "instruments/dragwidget.h"
+#include "widgets/dragwidget.h"
 
 #include <QApplication>
 #include <QPainter>

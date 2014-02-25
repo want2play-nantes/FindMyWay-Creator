@@ -4,9 +4,8 @@
 #include <QDialog>
 #include <QFileDialog>
 
-
 namespace Ui {
-class ProjectSettingsDialog;
+    class ProjectSettingsDialog;
 }
 
 class ProjectSettingsDialog : public QDialog
@@ -17,20 +16,39 @@ public:
     explicit ProjectSettingsDialog(QWidget *parent = 0);
     ~ProjectSettingsDialog();
     
+    int getBuilding() const;
+    void setBuilding(int value);
+
+    int getFloor() const;
+    void setFloor(int value);
+
+    int getUfrRef() const;
+    void setUfrRef(int value);
+
+    QString getFileName() const;
+
+    QString getMapPath() const;
+    void setMapPath(const QString &value);
+
 private slots:
-    void onUfrRefValueChanged(int value);
-    void onBuildingNumberValueChanged(int value);
-    void onFloorValueChanged(int value);
+    void on_ufrRef_valueChanged(int value);
 
-    void refreshFileName();
+    void on_buildingNumber_valueChanged(int value);
 
-    void onBrowseButtonReleased();
+    void on_floor_valueChanged(int value);
+
+    void on_browseButton_released();
 
 private:
     Ui::ProjectSettingsDialog *ui;
 
-    int building, floor, ufrRef;
-    QString fileName, mapPath;
+    int building;
+    int floor;
+    int ufrRef;
+    QString fileName;
+    QString mapPath;
+
+    void refreshFileName();
 };
 
 #endif // PROJECTSETTINGSDIALOG_H
