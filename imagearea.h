@@ -16,7 +16,7 @@ class ImageArea : public QWidget
 
 public:
 
-    explicit ImageArea(const bool &isOpen, const QString &filePath, QWidget *parent);
+    explicit ImageArea(const QString &filePath, QWidget *parent);
     ~ImageArea();
 
     bool save();
