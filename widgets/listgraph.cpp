@@ -1,8 +1,8 @@
-#include "liste_graphe.h"
+#include "listgraph.h"
 //------------------------------------------------------------------------
 //...
 //------------------------------------------------------------------------
-liste_graphe::liste_graphe(QWidget *_p):QTreeView(_p)
+ListGraph::ListGraph(QWidget *_p):QTreeView(_p)
 {
     idx_item=1;
     selected_item_id=-1;
@@ -34,7 +34,7 @@ liste_graphe::liste_graphe(QWidget *_p):QTreeView(_p)
 //------------------------------------------------------------------------
 // inserer un nouveau liste item.
 //------------------------------------------------------------------------
-QStandardItem* liste_graphe::nouveau_liste_item(QString _nom=0)
+QStandardItem* ListGraph::nouveau_liste_item(QString _nom=0)
 {
     char *_buff=new char[512];
     //recuperer le nom du fichier..
@@ -80,7 +80,7 @@ QStandardItem* liste_graphe::nouveau_liste_item(QString _nom=0)
 //------------------------------------------------------------------------
 // ajouter une instance
 //------------------------------------------------------------------------
-QStandardItem* liste_graphe::ajouter_une_inst(QStandardItem* _item_p,QString& F_name)
+QStandardItem* ListGraph::ajouter_une_inst(QStandardItem* _item_p,QString& F_name)
 {
     QString _f_nom("i:");
     //QFileInfo q_file(F_name());
@@ -162,7 +162,7 @@ QStandardItem* liste_graphe::ajouter_une_sol(QStandardItem* _item_p,solution *_s
 //--------------------------------------------------------------------
 // slot: selecter un item [double click]
 //--------------------------------------------------------------------
-void liste_graphe::item_selected_slot(QModelIndex _idx)
+void ListGraph::item_selected_slot(QModelIndex _idx)
 {
     QStandardItem *_it = _modele->itemFromIndex(_idx);
     //condition d'emettre la signe.
@@ -181,7 +181,7 @@ void liste_graphe::item_selected_slot(QModelIndex _idx)
 //--------------------------------------------------------------------
 // obtenir la session item a partir du _item_fils donnee...
 //--------------------------------------------------------------------
-int liste_graphe::get_session_item(QStandardItem *_item_fils,QStandardItem*& _item_session)
+int ListGraph::get_session_item(QStandardItem *_item_fils,QStandardItem*& _item_session)
 {
 
     //1. verifier le nombre d'intance...

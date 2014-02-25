@@ -1,5 +1,5 @@
-#ifndef LISTE_GRAPHE_H
-#define LISTE_GRAPHE_H
+#ifndef LIST_GRAPH_H
+#define LIST_GRAPH_H
 #include <QTreeView>
 #include <QMessageBox>
 #include <QStandardItemModel>
@@ -9,13 +9,11 @@
 #include <QString>
 #include <QFileInfo>
 
-//#include "visu_graphe.h"
-
-class liste_graphe:public QTreeView
+class ListGraph:public QTreeView
 {
       Q_OBJECT
 public:
-    liste_graphe(QWidget *_p);
+    ListGraph(QWidget *_p);
     QStandardItem* nouveau_liste_item(QString _nom);
     QStandardItem* ajouter_une_inst(QStandardItem* _item_p,QString& f);
    // QStandardItem* ajouter_une_sol(QStandardItem* _item_p,solution *);
@@ -39,4 +37,4 @@ signals:
      void item_selected_slot(QModelIndex _idx);
 };
 
-#endif // LISTE_GRAPHE_H
+#endif // LIST_GRAPH_H

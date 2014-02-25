@@ -23,55 +23,16 @@ UI_DIR = build
 SOURCES += main.cpp\
         mainwindow.cpp \
     imagearea.cpp \
-    datasingleton.cpp \
-    additionaltools.cpp \
-    undocommand.cpp \
-    widgets/toolbar.cpp \
-    widgets/shortcutedit.cpp \
-    dialogs/resizedialog.cpp \
-    dialogs/settingsdialog.cpp \
-    dialogs/textdialog.cpp \
-    instruments/abstractinstrument.cpp \
-    instruments/abstractselection.cpp \
-    instruments/lineinstrument.cpp \
-    instruments/rectangleinstrument.cpp \
-    instruments/ellipseinstrument.cpp \
-    instruments/magnifierinstrument.cpp \
-    instruments/selectioninstrument.cpp \
-    dialogs/effectsettingsdialog.cpp \
-    widgets/customfiltersettings.cpp \
-    widgets/sharpenfiltersettings.cpp \
-    widgets/imagepreview.cpp \
-    widgets/gaussianblurfiltersettings.cpp \
     instruments/dragwidget.cpp \
-    widgets/liste_graphe.cpp
+    widgets/listgraph.cpp \
+    dialog/projectsettingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     easypaintenums.h \
     imagearea.h \
-    datasingleton.h \
-    additionaltools.h \
-    undocommand.h \
-    widgets/toolbar.h \
-    widgets/shortcutedit.h \
-    dialogs/resizedialog.h \
-    dialogs/settingsdialog.h \
-    dialogs/textdialog.h \
-    instruments/abstractinstrument.h \
-    instruments/abstractselection.h \
-    instruments/lineinstrument.h \
-    instruments/rectangleinstrument.h \
-    instruments/ellipseinstrument.h \
-    instruments/magnifierinstrument.h \
-    instruments/selectioninstrument.h \
-    dialogs/effectsettingsdialog.h \
-    widgets/customfiltersettings.h \
-    widgets/abstracteffectsettings.h \
-    widgets/sharpenfiltersettings.h \
-    widgets/imagepreview.h \
-    widgets/gaussianblurfiltersettings.h \
     instruments/dragwidget.h \
-    widgets/liste_graphe.h
+    widgets/listgraph.h \
+    dialog/projectsettingsdialog.h
 
 RESOURCES += \
     resources.qrc
@@ -101,7 +62,8 @@ isEmpty(TS_DIR) {
 INSTALLS += target translations desktop icon
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    dialog/projectsettingsdialog.ui
 
 
 

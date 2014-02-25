@@ -6,7 +6,6 @@
 #include <QtCore/QTranslator>
 
 #include "mainwindow.h"
-#include "datasingleton.h"
 
 void printHelpMessage()
 {

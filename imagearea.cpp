@@ -1,14 +1,6 @@
 
 #include "imagearea.h"
-#include "datasingleton.h"
-#include "undocommand.h"
 
-#include "instruments/abstractinstrument.h"
-#include "instruments/lineinstrument.h"
-#include "instruments/rectangleinstrument.h"
-#include "instruments/ellipseinstrument.h"
-#include "instruments/magnifierinstrument.h"
-#include "instruments/selectioninstrument.h"
 #include "dialogs/resizedialog.h"
 #include "instruments/dragwidget.h"
 
@@ -44,12 +36,8 @@ ImageArea::ImageArea(const bool &isOpen, const QString &filePath, QWidget *paren
     mZoomFactor = 1;
 
     setAcceptDrops(true);
-    mAdditionalTools = new AdditionalTools(this, this->parent());
 
-
-
-    mUndoStack = new QUndoStack(this);
-    mUndoStack->setUndoLimit(DataSingleton::Instance()->getHistoryDepth());
+    mZoomedFactor = 1;
 
     if(isOpen && filePath.isEmpty())
     {
@@ -61,56 +49,19 @@ ImageArea::ImageArea(const bool &isOpen, const QString &filePath, QWidget *paren
     }
     else
     {
-        int width, height;
-        width = DataSingleton::Instance()->getBaseSize().width();
-        height = DataSingleton::Instance()->getBaseSize().height();
-        if (DataSingleton::Instance()->getIsInitialized() &&
-            DataSingleton::Instance()->getIsAskCanvasSize())
-        {
-            QClipboard *globalClipboard = QApplication::clipboard();
-            QImage mClipboardImage = globalClipboard->image();
-            if (!mClipboardImage.isNull())
-            {
-                width = mClipboardImage.width();
-                height = mClipboardImage.height();
-            }
-            ResizeDialog resizeDialog(QSize(width, height), this);
-            if(resizeDialog.exec() != QDialog::Accepted)
-                return;
-            QSize newSize = resizeDialog.getNewSize();
-            width = newSize.width();
-            height = newSize.height();
-            mAdditionalTools->resizeCanvas(width, height, false);
-            mIsEdited = false;
-        }
         QPainter *painter = new QPainter(mImage);
-        painter->fillRect(0, 0, width, height, Qt::white);
+        painter->fillRect(0, 0, mImage->width(), mImage->height(), Qt::white);
         painter->end();
 
-        resize(mImage->rect().right() + 6,
-               mImage->rect().bottom() + 6);
+        resize(mImage->rect().right() + 6, mImage->rect().bottom() + 6);
         mFilePath = QString(""); // empty name indicate that user has accepted tab creation
     }
 
     QTimer *autoSaveTimer = new QTimer(this);
-    autoSaveTimer->setInterval(DataSingleton::Instance()->getAutoSaveInterval() * 1000);
+    autoSaveTimer->setInterval(300000);
     connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSave()));
-    connect(mAdditionalTools, SIGNAL(sendNewImageSize(QSize)), this, SIGNAL(sendNewImageSize(QSize)));
 
     autoSaveTimer->start();
-
-    SelectionInstrument *selectionInstrument = new SelectionInstrument(this);
-    connect(selectionInstrument, SIGNAL(sendEnableCopyCutActions(bool)), this, SIGNAL(sendEnableCopyCutActions(bool)));
-    connect(selectionInstrument, SIGNAL(sendEnableSelectionInstrument(bool)), this, SIGNAL(sendEnableSelectionInstrument(bool)));
-
-    // Instruments handlers
-    mInstrumentsHandlers.fill(0, (int)INSTRUMENTS_COUNT);
-    mInstrumentsHandlers[CURSOR] = selectionInstrument;
-    mInstrumentsHandlers[LINE] = new LineInstrument(this);
-    mInstrumentsHandlers[RECTANGLE] = new RectangleInstrument(this);
-    mInstrumentsHandlers[ELLIPSE] = new EllipseInstrument(this);
-    mInstrumentsHandlers[MAGNIFIER] = new MagnifierInstrument(this);
-
 }
 
 ImageArea::~ImageArea()
@@ -120,20 +71,19 @@ ImageArea::~ImageArea()
 
 void ImageArea::initializeImage()
 {
-    mImage = new QImage(DataSingleton::Instance()->getBaseSize(),
-                        QImage::Format_ARGB32_Premultiplied);
+    mImage = new QImage(QSize(400, 300), QImage::Format_ARGB32_Premultiplied);
 }
 
 void ImageArea::open()
 {
-    QString fileName(mFilePath);
-    QFileDialog dialog(this, tr("Open image..."), "", mOpenFilter);
-    QString prevPath = DataSingleton::Instance()->getLastFilePath();
+    QFileDialog dialog(this, tr("Ouvrir une image..."), "", mOpenFilter);
 
-    if (!prevPath.isEmpty())
-        dialog.selectFile(prevPath);
-    else
+    if (!mLastFilePath.isEmpty()) {
+        dialog.setDirectory(mLastFilePath);
+    }
+    else {
         dialog.setDirectory(QDir::homePath());
+    }
 
     if (dialog.exec())
     {
@@ -154,7 +104,7 @@ void ImageArea::open(const QString &filePath)
     {
         *mImage = mImage->convertToFormat(QImage::Format_ARGB32_Premultiplied);
         mFilePath = filePath;
-        DataSingleton::Instance()->setLastFilePath(filePath);
+        mLastFilePath = filePath;
         resize(mImage->rect().right() + 6,
                mImage->rect().bottom() + 6);
         QApplication::restoreOverrideCursor();
@@ -173,7 +123,7 @@ bool ImageArea::save()
     {
         return saveAs();
     }
-    clearSelection();
+    //clearSelection();
     if (!mImage->save(mFilePath))
     {
         QMessageBox::warning(this, tr("Error saving file"), tr("Can't save file \"%1\".").arg(mFilePath));
@@ -188,7 +138,7 @@ bool ImageArea::saveAs()
     bool result = true;
     QString filter;
     QString fileName(mFilePath);
-    clearSelection();
+    //clearSelection();
     if(fileName.isEmpty())
     {
         fileName = QDir::homePath() + "/" + tr("Untitled image") + ".png";
@@ -236,7 +186,7 @@ bool ImageArea::saveAs()
 
 void ImageArea::autoSave()
 {
-    if(mIsEdited && !mFilePath.isEmpty() && DataSingleton::Instance()->getIsAutoSave())
+    if(mIsEdited && !mFilePath.isEmpty())
     {
         if(mImage->save(mFilePath)) {
             mIsEdited = false;
@@ -244,83 +194,43 @@ void ImageArea::autoSave()
     }
 }
 
-void ImageArea::resizeImage()
-{
-    mAdditionalTools->resizeImage();
-    emit sendNewImageSize(mImage->size());
-}
-
-void ImageArea::resizeCanvas()
-{
-    mAdditionalTools->resizeCanvas(mImage->width(), mImage->height(), true);
-    emit sendNewImageSize(mImage->size());
-}
-
-void ImageArea::rotateImage(bool flag)
-{
-    mAdditionalTools->rotateImage(flag);
-    emit sendNewImageSize(mImage->size());
-}
-
-
-
 bool ImageArea::zoomImage(qreal factor)
 {
-    return mAdditionalTools->zoomImage(factor);
-}
+    mZoomedFactor *= factor;
+    if(mZoomedFactor < 0.25)
+    {
+        mZoomedFactor = 0.25;
+        return false;
+    }
+    else if(mZoomedFactor > 4)
+    {
+        mZoomedFactor = 4;
+        return false;
+    }
+    else
+    {
+        this->setImage(mImage->transformed(QTransform::fromScale(factor, factor)));
+        //this->resize((mPImageArea->rect().width())*factor, (mPImageArea->rect().height())*factor);
+        this->setEdited(true);
+        return true;
+    }
 
-void ImageArea::copyImage()
-{
-    SelectionInstrument *instrument = static_cast <SelectionInstrument*> (mInstrumentsHandlers.at(CURSOR));
-    instrument->copyImage(*this);
 }
-
-void ImageArea::pasteImage()
-{
-    if(DataSingleton::Instance()->getInstrument() != CURSOR)
-        emit sendSetInstrument(CURSOR);
-    SelectionInstrument *instrument = static_cast <SelectionInstrument*> (mInstrumentsHandlers.at(CURSOR));
-    instrument->pasteImage(*this);
-}
-
-void ImageArea::cutImage()
-{
-    SelectionInstrument *instrument = static_cast <SelectionInstrument*> (mInstrumentsHandlers.at(CURSOR));
-    instrument->cutImage(*this);
-}
-
 
 void ImageArea::mouseMoveEvent(QMouseEvent *event)
 {
-    InstrumentsEnum instrument = DataSingleton::Instance()->getInstrument();
-    mInstrumentHandler = mInstrumentsHandlers.at(DataSingleton::Instance()->getInstrument());
-    if(mIsResize)
-    {
-         mAdditionalTools->resizeCanvas(event->x(), event->y());
-         emit sendNewImageSize(mImage->size());
-    }
-    else if(event->pos().x() < mImage->rect().right() + 6 &&
+    if(event->pos().x() < mImage->rect().right() + 6 &&
             event->pos().x() > mImage->rect().right() &&
             event->pos().y() > mImage->rect().bottom() &&
             event->pos().y() < mImage->rect().bottom() + 6)
     {
         setCursor(Qt::SizeFDiagCursor);
-        if (qobject_cast<AbstractSelection*>(mInstrumentHandler))
-            return;
     }
-    else if (!qobject_cast<AbstractSelection*>(mInstrumentHandler))
-    {
-        restoreCursor();
-    }
+
     if(event->pos().x() < mImage->width() &&
             event->pos().y() < mImage->height())
     {
         emit sendCursorPos(event->pos());
-    }
-
-    if(instrument != NONE_INSTRUMENT)
-    {
-        mInstrumentHandler->mouseMoveEvent(event, *this);
     }
 }
 
@@ -329,12 +239,6 @@ void ImageArea::mouseReleaseEvent(QMouseEvent *event)
     if(mIsResize)
     {
        mIsResize = false;
-       restoreCursor();
-    }
-    else if(DataSingleton::Instance()->getInstrument() != NONE_INSTRUMENT)
-    {
-        mInstrumentHandler = mInstrumentsHandlers.at(DataSingleton::Instance()->getInstrument());
-        mInstrumentHandler->mouseReleaseEvent(event, *this);
     }
 }
 
@@ -356,89 +260,6 @@ void ImageArea::paintEvent(QPaintEvent *event)
                             mImage->rect().bottom(), 6, 6));
 
     painter->end();
-}
-
-
-
-
-void ImageArea::restoreCursor()
-{
-    switch(DataSingleton::Instance()->getInstrument())
-    {
-    case INSTRUMENTS_COUNT:
-        break;
-    case MAGNIFIER:
-        mPixmap = new QPixmap(":/media/instruments-icons/cursor_loupe.png");
-        mCurrentCursor = new QCursor(*mPixmap);
-        setCursor(*mCurrentCursor);
-        break;
-    case NONE_INSTRUMENT:
-        mCurrentCursor = new QCursor(Qt::ArrowCursor);
-        setCursor(*mCurrentCursor);
-        break;
-    case CURSOR:
-        mCurrentCursor = new QCursor(Qt::CrossCursor);
-        setCursor(*mCurrentCursor);
-        break;
-
-    case RECTANGLE: case ELLIPSE: case LINE:
-        mCurrentCursor = new QCursor(Qt::CrossCursor);
-        setCursor(*mCurrentCursor);
-        break;
-
-    }
-}
-
-void ImageArea::drawCursor()
-{
-    QPainter painter;
-    mPixmap = new QPixmap(25, 25);
-    QPoint center(13, 13);
-    switch(DataSingleton::Instance()->getInstrument())
-    {
-    case NONE_INSTRUMENT: case LINE: case MAGNIFIER:
-case RECTANGLE: case ELLIPSE: case CURSOR: case INSTRUMENTS_COUNT:
-
-        break;
-
-    }
-    painter.begin(mPixmap);
-    switch(DataSingleton::Instance()->getInstrument())
-    {
-    case NONE_INSTRUMENT: case LINE: case MAGNIFIER:
-    case RECTANGLE: case ELLIPSE: case CURSOR: case INSTRUMENTS_COUNT:
-
-        break;
-
-        painter.drawEllipse(center, DataSingleton::Instance()->getPenSize()/2,
-                        DataSingleton::Instance()->getPenSize()/2);
-        break;
-
-    }
-    painter.setPen(Qt::black);
-    painter.drawPoint(13, 13);
-    painter.drawPoint(13, 3);
-    painter.drawPoint(13, 5);
-    painter.drawPoint(13, 21);
-    painter.drawPoint(13, 23);
-    painter.drawPoint(3, 13);
-    painter.drawPoint(5, 13);
-    painter.drawPoint(21, 13);
-    painter.drawPoint(23, 13);
-    painter.setPen(Qt::white);
-    painter.drawPoint(13, 12);
-    painter.drawPoint(13, 14);
-    painter.drawPoint(12, 13);
-    painter.drawPoint(14, 13);
-    painter.drawPoint(13, 4);
-    painter.drawPoint(13, 6);
-    painter.drawPoint(13, 20);
-    painter.drawPoint(13, 22);
-    painter.drawPoint(4, 13);
-    painter.drawPoint(6, 13);
-    painter.drawPoint(20, 13);
-    painter.drawPoint(22, 13);
-    painter.end();
 }
 
 void ImageArea::makeFormatsFilters()
@@ -496,31 +317,6 @@ void ImageArea::makeFormatsFilters()
     if(ba.contains("xpm"))
         mSaveFilter += ";;X11 Pixmap(*.xpm)";
 }
-
-void ImageArea::saveImageChanges()
-{
-    foreach (AbstractInstrument* instrument, mInstrumentsHandlers)
-    {
-        if (AbstractSelection *selection = qobject_cast<AbstractSelection*>(instrument))
-            selection->saveImageChanges(*this);
-    }
-}
-
-void ImageArea::clearSelection()
-{
-    foreach (AbstractInstrument* instrument, mInstrumentsHandlers)
-    {
-        if (AbstractSelection *selection = qobject_cast<AbstractSelection*>(instrument))
-            selection->clearSelection(*this);
-    }
-}
-
-void ImageArea::pushUndoCommand(UndoCommand *command)
-{
-    if(command != 0)
-        mUndoStack->push(command);
-}
-
 
 void ImageArea::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -588,11 +384,7 @@ void ImageArea::mousePressEvent(QMouseEvent *event)
         mIsResize = true;
         setCursor(Qt::SizeFDiagCursor);
     }
-    else if(DataSingleton::Instance()->getInstrument() != NONE_INSTRUMENT)
-    {
-        mInstrumentHandler = mInstrumentsHandlers.at(DataSingleton::Instance()->getInstrument());
-        mInstrumentHandler->mousePressEvent(event, *this);
-    }
+
     QLabel *child = static_cast<QLabel*>(childAt(event->pos()));
     if (!child)
         return;
