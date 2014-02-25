@@ -3,6 +3,10 @@
 
 #include <QDialog>
 #include <QFileDialog>
+#include <QCloseEvent>
+#include <QLabel>
+#include <QPixmap>
+#include <QFile>
 
 namespace Ui {
     class ProjectSettingsDialog;
@@ -30,6 +34,9 @@ public:
     QString getMapPath() const;
     void setMapPath(const QString &value);
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private slots:
     void on_ufrRef_valueChanged(int value);
 
@@ -39,6 +46,11 @@ private slots:
 
     void on_browseButton_released();
 
+    void on_mapPath_textChanged(const QString &arg1);
+
+    void on_partCheckBox_stateChanged(int arg1);
+
+    void on_part_valueChanged(int arg1);
 
 private:
     Ui::ProjectSettingsDialog *ui;
@@ -46,6 +58,7 @@ private:
     int building;
     int floor;
     int ufrRef;
+    QString part;
     QString fileName;
     QString mapPath;
 

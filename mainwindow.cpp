@@ -65,10 +65,10 @@ void MainWindow::initializeTabWidget()
 
 }
 
-void MainWindow::initializeNewTab(const QString &filePath)
+bool MainWindow::initializeNewTab(const QString &filePath)
 {
     if (filePath.isEmpty())
-        return;
+        return false;
 
     QString tabName(tr("Untitled Image"));
 
@@ -85,7 +85,7 @@ void MainWindow::initializeNewTab(const QString &filePath)
 
     setWindowTitle(QString("%1 - Find my way").arg(tabName));
 
-    //treeView->nouveau_liste_item(tabName);
+    return true;
 }
 
 void MainWindow::initializeMainMenu()
@@ -256,9 +256,6 @@ void MainWindow::initializeDragbalWidget()
     boatIcontext5->move(0, 200);
     boatIcontext5->setText("porte principale");
 
-
-
-
     drg1->addWidget(boatIcon);
     drg1->addWidget(boatIcontext);
     ui->verticalLayout1->addWidget(drg1);
@@ -350,10 +347,12 @@ void MainWindow::newAct()
 
     if (projectSettingsDialog.exec() == QDialog::Accepted)
     {
-        initializeNewTab(projectSettingsDialog.getMapPath());
+        if (initializeNewTab(projectSettingsDialog.getMapPath()))
+        {
+            treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
+        }
 
         //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-        treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
 
         //QMessageBox msgBox;
         //msgBox.setText("Création d'un nouveau fichier avec les informations entrées.");

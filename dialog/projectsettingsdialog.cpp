@@ -17,6 +17,13 @@ ProjectSettingsDialog::ProjectSettingsDialog(QWidget *parent) :
     ui->floor->setValue(this->floor);
 
     refreshFileName();
+
+    setFixedWidth(678);
+    setFixedHeight(703);
+
+    ui->imagePreview->setScaledContents(true);
+
+    ui->part->setEnabled(false);
 }
 
 ProjectSettingsDialog::~ProjectSettingsDialog()
@@ -51,6 +58,10 @@ void ProjectSettingsDialog::refreshFileName()
         tFileName += "0" + QString::number(floor);
     else
         tFileName += "S" + QString::number(-floor - 1);
+
+    if (!part.isEmpty()) {
+        tFileName += part;
+    }
 
     this->fileName = tFileName;
     ui->fileName->setText(tFileName + ".unmap");
@@ -92,3 +103,53 @@ void ProjectSettingsDialog::on_browseButton_released()
     }
 }
 
+void ProjectSettingsDialog::closeEvent(QCloseEvent *event)
+{
+    if(false)
+    {
+        event->accept();
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
+void ProjectSettingsDialog::on_mapPath_textChanged(const QString &text)
+{
+    QFile file(text);
+    if (text.isEmpty() || !file.exists()) {
+        ui->imagePreview->setText("Aperçu du plan");
+    }
+    else
+    {
+        QPixmap image(text);
+
+        // Ne fonctionne pas, l'image n'est pas scale
+        image.scaled(125, 75, Qt::KeepAspectRatio, Qt::FastTransformation);
+
+        ui->imagePreview->setPixmap(image);
+    }
+}
+
+void ProjectSettingsDialog::on_partCheckBox_stateChanged(int status)
+{
+    if (status == Qt::Checked)
+    {
+        ui->part->setEnabled(true);
+        part = QString(QChar(ui->part->value()+96));
+    }
+    else if (status == Qt::Unchecked)
+    {
+        ui->part->setEnabled(false);
+        part = "";
+    }
+
+    refreshFileName();
+}
+
+void ProjectSettingsDialog::on_part_valueChanged(int value)
+{
+    this->part = QString(QChar(ui->part->value()+96));
+    refreshFileName();
+}
