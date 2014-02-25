@@ -91,3 +91,4 @@ void ProjectSettingsDialog::on_browseButton_released()
         }
     }
 }
+
