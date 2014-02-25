@@ -49,15 +49,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeTabWidget()
 {
-    ui->tabWidget->setUsesScrollButtons(true);
-    ui->tabWidget->setTabsClosable(true);
+    mTabWidget = new QTabWidget(this);
 
-    ui->tabWidget->setMovable(true);
-    ui->tabWidget->setAcceptDrops(true);
+    mTabWidget->setUsesScrollButtons(true);
+    mTabWidget->setTabsClosable(true);
 
-    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
-    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(enableActions(int)));
-    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    mTabWidget->setMovable(true);
+    mTabWidget->setAcceptDrops(true);
+
+    connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
+    connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(enableActions(int)));
+    connect(mTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
     ui->scrollArea->setWidget(mTabWidget);
 
