@@ -14,12 +14,11 @@ class ListGraph:public QTreeView
       Q_OBJECT
 public:
     ListGraph(QWidget *_p);
-    QStandardItem* nouveau_liste_item(QString _nom);
-    QStandardItem* ajouter_une_inst(QStandardItem* _item_p,QString& f);
+    QStandardItem *addItem(QString _nom);
+    QStandardItem *addItem(QStandardItem* _item_p,QString& f);
    // QStandardItem* ajouter_une_sol(QStandardItem* _item_p,solution *);
 
-    int get_session_item(QStandardItem *_item_fils,QStandardItem*& _item_session);
-
+    int get_session_item(QStandardItem *_item_fils, QStandardItem*& _item_session);
 
     QStandardItemModel *_modele;// modele
     QStandardItem *_root; // item root

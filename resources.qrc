@@ -28,4 +28,7 @@
     <qresource prefix="/logos">
         <file>logos/salle.png</file>
     </qresource>
+    <qresource lang="DTD" prefix="/data">
+        <file>data.dtd</file>
+    </qresource>
 </RCC>

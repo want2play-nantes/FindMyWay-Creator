@@ -34,8 +34,8 @@ public:
     QString getMapPath() const;
     void setMapPath(const QString &value);
 
-protected:
-    void closeEvent(QCloseEvent *event);
+    bool getEditable() const;
+    void setEditable(bool value);
 
 private slots:
     void on_ufrRef_valueChanged(int value);
@@ -61,6 +61,8 @@ private:
     QString part;
     QString fileName;
     QString mapPath;
+
+    bool editable;
 
     void refreshFileName();
 };

@@ -9,21 +9,24 @@ ProjectSettingsDialog::ProjectSettingsDialog(QWidget *parent) :
     ui(new Ui::ProjectSettingsDialog),
     ufrRef(10),
     building(1),
-    floor(0)
+    floor(0),
+    editable(true)
 {
     ui->setupUi(this);
     ui->ufrRef->setValue(this->ufrRef);
     ui->buildingNumber->setValue(this->building);
     ui->floor->setValue(this->floor);
 
+    ui->imagePreview->setScaledContents(true);
+
+    ui->part->setEnabled(false);
+
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
     refreshFileName();
 
     setFixedWidth(678);
     setFixedHeight(703);
-
-    ui->imagePreview->setScaledContents(true);
-
-    ui->part->setEnabled(false);
 }
 
 ProjectSettingsDialog::~ProjectSettingsDialog()
@@ -33,6 +36,21 @@ ProjectSettingsDialog::~ProjectSettingsDialog()
 
 QString ProjectSettingsDialog::getMapPath() const { return mapPath; }
 void ProjectSettingsDialog::setMapPath(const QString &value) { mapPath = value; }
+
+bool ProjectSettingsDialog::getEditable() const { return editable; }
+
+void ProjectSettingsDialog::setEditable(bool value)
+{
+    editable = value;
+
+    if (!editable) {
+        ui->browseButton->setEnabled(false);
+    }
+    else {
+        ui->browseButton->setEnabled(true);
+    }
+}
+
 
 QString ProjectSettingsDialog::getFileName() const { return fileName; }
 
@@ -99,19 +117,9 @@ void ProjectSettingsDialog::on_browseButton_released()
         {
             mapPath = selectedFiles.takeFirst();
             ui->mapPath->setText(this->mapPath);
-        }
-    }
-}
 
-void ProjectSettingsDialog::closeEvent(QCloseEvent *event)
-{
-    if(false)
-    {
-        event->accept();
-    }
-    else
-    {
-        event->ignore();
+            ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        }
     }
 }
 

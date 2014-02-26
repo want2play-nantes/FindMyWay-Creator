@@ -146,28 +146,6 @@ void MainWindow::initializeMainMenu()
         fileMenu->addAction(mExitAction);
     }
 
-    QMenu *zoomMenu = menuBar()->addMenu(tr("Zoom"));
-    {
-        mZoomInAction = new QAction(tr("Zoom avant"), this);
-        mZoomInAction->setShortcut(QKeySequence::ZoomIn);
-        mZoomInAction->setIcon(QIcon::fromTheme("zoom-in", QIcon(":/media/actions-icons/zoom-in.png")));
-        mZoomInAction->setIconVisibleInMenu(true);
-        connect(mZoomInAction, SIGNAL(triggered()), this, SLOT(zoomInAct()));
-        zoomMenu->addAction(mZoomInAction);
-
-        mZoomOutAction = new QAction(tr("Zoom arrière"), this);
-        mZoomOutAction->setShortcut(QKeySequence::ZoomOut);
-        mZoomOutAction->setIcon(QIcon::fromTheme("zoom-out", QIcon(":/media/actions-icons/zoom-out.png")));
-        mZoomOutAction->setIconVisibleInMenu(true);
-        connect(mZoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOutAct()));
-        zoomMenu->addAction(mZoomOutAction);
-
-        mAdvancedZoomAction = new QAction(tr("Zoom avancé..."), this);
-        mAdvancedZoomAction->setIconVisibleInMenu(true);
-        connect(mAdvancedZoomAction, SIGNAL(triggered()), this, SLOT(advancedZoomAct()));
-        zoomMenu->addAction(mAdvancedZoomAction);
-    }
-
     QMenu *aboutMenu = menuBar()->addMenu(tr("&A propos"));
     {
         mAboutAction = new QAction(tr("&About FindMyWay"), this);
@@ -349,7 +327,7 @@ void MainWindow::newAct()
     {
         if (initializeNewTab(projectSettingsDialog.getMapPath()))
         {
-            treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
+            treeView->addItem(getCurrentImageArea()->getFileName());
         }
 
         //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
@@ -373,7 +351,7 @@ void MainWindow::saveAct()
 {
     getCurrentImageArea()->save();
     mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-    treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
+    treeView->addItem(getCurrentImageArea()->getFileName());
 
 }
 
@@ -388,34 +366,15 @@ void MainWindow::settingsAct()
     /*
      * Ouvre un ProjectSettingsDialog en mode édition
      */
+    ProjectSettingsDialog projectSettingsDialog(this);
+    projectSettingsDialog.setEditable(false);
 
-    //MapPropertiesDialog settingsDialog(this);
-    //if(settingsDialog.exec() == QDialog::Accepted)
-    //{
-    //    mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-    //}
-}
-
-void MainWindow::zoomInAct()
-{
-    getCurrentImageArea()->zoomImage(2.0);
-    getCurrentImageArea()->setZoomFactor(2.0);
-}
-
-void MainWindow::zoomOutAct()
-{
-    getCurrentImageArea()->zoomImage(0.5);
-    getCurrentImageArea()->setZoomFactor(0.5);
-}
-
-void MainWindow::advancedZoomAct()
-{
-    bool ok;
-    qreal factor = QInputDialog::getDouble(this, tr("Enter zoom factor"), tr("Zoom factor:"), 2.5, 0, 1000, 5, &ok);
-    if (ok)
+    if (projectSettingsDialog.exec() == QDialog::Accepted)
     {
-        getCurrentImageArea()->zoomImage(factor);
-        getCurrentImageArea()->setZoomFactor(factor);
+        if (initializeNewTab(projectSettingsDialog.getMapPath()))
+        {
+            // Modifier objet Map
+        }
     }
 }
 

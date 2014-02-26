@@ -76,9 +76,6 @@ private slots:
     void saveAct();
     void saveAsAct();
     void settingsAct();
-    void zoomInAct();
-    void zoomOutAct();
-    void advancedZoomAct();
     void closeTabAct();
     void closeTab(int index);
 

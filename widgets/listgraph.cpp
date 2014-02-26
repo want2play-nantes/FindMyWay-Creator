@@ -34,7 +34,7 @@ ListGraph::ListGraph(QWidget *_p):QTreeView(_p)
 //------------------------------------------------------------------------
 // inserer un nouveau liste item.
 //------------------------------------------------------------------------
-QStandardItem* ListGraph::nouveau_liste_item(QString _nom=0)
+QStandardItem* ListGraph::addItem(QString _nom=0)
 {
     char *_buff=new char[512];
     //recuperer le nom du fichier..
@@ -80,7 +80,7 @@ QStandardItem* ListGraph::nouveau_liste_item(QString _nom=0)
 //------------------------------------------------------------------------
 // ajouter une instance
 //------------------------------------------------------------------------
-QStandardItem* ListGraph::ajouter_une_inst(QStandardItem* _item_p,QString& F_name)
+QStandardItem* ListGraph::addItem(QStandardItem* _item_p,QString& F_name)
 {
     QString _f_nom("i:");
     //QFileInfo q_file(F_name());

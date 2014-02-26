@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets printsupport
@@ -25,14 +25,26 @@ SOURCES += main.cpp\
     imagearea.cpp \
     widgets/dragwidget.cpp \
     widgets/listgraph.cpp \
-    dialog/projectsettingsdialog.cpp
+    dialog/projectsettingsdialog.cpp \
+    core/map.cpp \
+    core/node.cpp \
+    core/edge.cpp \
+    core/nodes/classroom.cpp \
+    core/pathnode.cpp \
+    core/finalnode.cpp
 
 HEADERS  += mainwindow.h \
     easypaintenums.h \
     imagearea.h \
     widgets/dragwidget.h \
     widgets/listgraph.h \
-    dialog/projectsettingsdialog.h
+    dialog/projectsettingsdialog.h \
+    core/map.h \
+    core/node.h \
+    core/edge.h \
+    core/nodes/classroom.h \
+    core/pathnode.h \
+    core/finalnode.h
 
 RESOURCES += \
     resources.qrc
