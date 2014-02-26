@@ -23,16 +23,15 @@ MainWindow::MainWindow(QStringList filePaths, QWidget *parent) : QMainWindow(par
     ui->setupUi(this);
 
     // Icone de l'application
-    setWindowIcon(QIcon(":/media/logo/FindMyWAy.png"));
+    setWindowIcon(QIcon("://media/actions-icons/clear-gray.png"));
 
     // Initialisation des menus
     initializeMainMenu();
 
-    // Initialisation des tabs
-    initializeTabWidget();
+
 
     // Initialisation de la liste
-    initilizeSession();
+   // initilizeSession();
 
     // Initialisation des zones de drag & drop
     initializeDragbalWidget();
@@ -40,6 +39,12 @@ MainWindow::MainWindow(QStringList filePaths, QWidget *parent) : QMainWindow(par
     horizontalLayout = new QHBoxLayout;
 
     setCentralWidget(this->centralWidget());
+
+
+    // Initialisation des tabs
+    initializeTabWidget();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -49,7 +54,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeTabWidget()
 {
-    mTabWidget = new QTabWidget(this);
+  /*  mTabWidget = new QTabWidget(this);
 
     mTabWidget->setUsesScrollButtons(true);
     mTabWidget->setTabsClosable(true);
@@ -62,30 +67,79 @@ void MainWindow::initializeTabWidget()
     connect(mTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
     ui->scrollArea->setWidget(mTabWidget);
+*/
+    treeView = new ListGraph(this);
+
+    sc = new Graphicscene(":/map/plans/10_14_01.png");
+    gr = new GraphicView(sc);
+    gr->setEnabled(true);
+    gr->setDragMode(QGraphicsView::RubberBandDrag);
+
+    gr->show();
+
+    layout = new QHBoxLayout;
+    widget = new QWidget;
+    widget->setLayout(layout);
+
+    splitter= new QSplitter(this);
+    splitter2= new QSplitter(this);
+
+    tabWidget1= new QTabWidget;
+    tabWidget2= new QTabWidget;
+    tabWidget3= new QTabWidget;
+
+    tabWidget1->addTab(treeView,QIcon("://media/instruments-icons/rectangle.png"),"Projects");
+
+    QString str("10_14_01.png");
+    treeView->nouveau_liste_item(str);
+    splitter->addWidget(tabWidget1);
+
+    layout->addWidget(splitter,2);
+
+    tabWidget2->addTab(gr,QIcon("://media/instruments-icons/rectangle.png"),"Works area");
+
+    splitter2->addWidget(tabWidget2);
+
+    layout->addWidget(splitter2,8);
+
+
+
+    tabWidget3->addTab(scrollArea,QIcon("://media/instruments-icons/rectangle.png"),"Drag&drop");
+    layout->addWidget(tabWidget3,2);
+    setCentralWidget(widget);
+
 
 }
 
 void MainWindow::initializeNewTab(const QString &filePath)
 {
-    if (filePath.isEmpty())
+ /*   if (filePath.isEmpty())
         return;
 
     QString tabName(tr("Untitled Image"));
 
     ImageArea *imageArea = new ImageArea(filePath, this);
     tabName = imageArea->getFileName();
+   // sc = new Graphicscene(filePath);
+
 
     QScrollArea * scrollArea = new QScrollArea();
     scrollArea->setAttribute(Qt::WA_DeleteOnClose);
     scrollArea->setBackgroundRole(QPalette::Dark);
     scrollArea->setWidget(imageArea);
-
-    mTabWidget->addTab(scrollArea, tabName);
+   // treeView->nouveau_liste_item(filePath);
+    mTabWidget->addTab(scrollArea, filePath);
     mTabWidget->setCurrentIndex(mTabWidget->count()-1);
+    /*QGraphicsView *qw = new QGraphicsView(this);
+    qw->setScene(sc);
+
+
 
     setWindowTitle(QString("%1 - Find my way").arg(tabName));
 
     //treeView->nouveau_liste_item(tabName);
+
+*/
 }
 
 void MainWindow::initializeMainMenu()
@@ -193,90 +247,14 @@ void MainWindow::initilizeSession(){
 
 void MainWindow::initializeDragbalWidget()
 {
-    this->setAcceptDrops(true);
+
+    scrollArea = new QScrollArea;
+
+    //this->setAcceptDrops(true);
     drg1 = new DragWidget(this);
-    drg2 = new DragWidget(this);
-    drg3 = new DragWidget(this);
-    drg4 = new DragWidget(this);
-    drg5 = new DragWidget(this);
 
-    QLabel *boatIcon = new QLabel(this);
-    boatIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    boatIcon->move(0, 50);
-    boatIcon->show();
-    boatIcon->setAttribute(Qt::WA_DeleteOnClose);
+    scrollArea->setWidget(drg1);
 
-    QLabel *boatIcontext = new QLabel(this);
-    boatIcontext->show();
-    boatIcontext->move(0, 50);
-    boatIcontext->setText("salle");
-
-    QLabel *carIcon = new QLabel(this);
-    carIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    carIcon->move(0, 60);
-    carIcon->show();
-    carIcon->setAttribute(Qt::WA_DeleteOnClose);
-
-
-    QLabel *boatIcontext2 = new QLabel(this);
-    boatIcontext2->show();
-    boatIcontext2->move(0, 50);
-    boatIcontext2->setText("escalier");
-
-    QLabel *houseIcon = new QLabel(this);
-    houseIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    houseIcon->move(0, 150);
-    houseIcon->show();
-    houseIcon->setAttribute(Qt::WA_DeleteOnClose);
-
-    QLabel *boatIcontext3 = new QLabel(this);
-    boatIcontext3->show();
-    boatIcontext3->move(0, 150);
-    boatIcontext3->setText("porte");
-
-    QLabel *houseIcon2 = new QLabel(this);
-    houseIcon2->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    houseIcon2->move(0, 200);
-    houseIcon2->show();
-    houseIcon2->setAttribute(Qt::WA_DeleteOnClose);
-
-    QLabel *boatIcontext4 = new QLabel(this);
-    boatIcontext4->show();
-    boatIcontext4->move(0, 200);
-    boatIcontext4->setText("fenetre");
-
-    QLabel *houseIcon3 = new QLabel(this);
-    houseIcon3->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    houseIcon3->move(0, 200);
-    houseIcon3->show();
-    houseIcon3->setAttribute(Qt::WA_DeleteOnClose);
-
-    QLabel *boatIcontext5 = new QLabel(this);
-    boatIcontext5->show();
-    boatIcontext5->move(0, 200);
-    boatIcontext5->setText("porte principale");
-
-
-
-
-    drg1->addWidget(boatIcon);
-    drg1->addWidget(boatIcontext);
-    ui->verticalLayout1->addWidget(drg1);
-    drg2->addWidget(carIcon);
-    drg2->addWidget(boatIcontext2);
-    ui->verticalLayout_2->addWidget(drg2);
-    drg3->addWidget(houseIcon);
-    drg3->addWidget(boatIcontext3);
-    ui->verticalLayout_3->addWidget(drg3);
-    drg4->addWidget(houseIcon2);
-    drg4->addWidget(boatIcontext4);
-    ui->verticalLayout_4->addWidget(drg4);
-    drg5->addWidget(houseIcon3);
-    drg5->addWidget(boatIcontext5);
-    ui->verticalLayout_5->addWidget(drg5);
-
-    // ui->verticalLayout->addWidget(drg);
-    // addToolBar(Qt::RightToolBarArea, drg);
 
 }
 
@@ -351,6 +329,9 @@ void MainWindow::newAct()
     if (projectSettingsDialog.exec() == QDialog::Accepted)
     {
         initializeNewTab(projectSettingsDialog.getMapPath());
+
+       // sc->setLayerFile(projectSettingsDialog.getFileName());
+
 
         //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
         treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
@@ -468,12 +449,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 bool MainWindow::isSomethingModified()
 {
-    for(int i = 0; i < mTabWidget->count(); ++i)
+    /*for(int i = 0; i < mTabWidget->count(); ++i)
     {
         if(getImageAreaByIndex(i)->getEdited())
             return true;
     }
-    return false;
+    return false;*/
 }
 
 bool MainWindow::closeAllTabs()
@@ -521,4 +502,19 @@ void MainWindow::helpAct()
                        QString("Project IHM M1 ALMA")
                        .arg(tr("version")).arg("0.1.0").arg(tr("Site")).arg(tr("Authors"))
                        .arg(tr("If you like <b>FindMyWay</b> and you want to share your opinion, or send a bug report, or want to suggest new features, we are waiting for you on our <a>arafet.ferdjani@gmail.com</a>.")));
+}
+
+void MainWindow::on_actionNouveau_triggered()
+{
+    newAct();
+}
+
+void MainWindow::on_actionFermer_Fenetre_triggered()
+{
+    sc->deleteComponents();
+}
+
+void MainWindow::on_actionHelp_triggered()
+{
+    helpAct();
 }

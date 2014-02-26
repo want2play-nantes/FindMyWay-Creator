@@ -25,14 +25,22 @@ SOURCES += main.cpp\
     imagearea.cpp \
     widgets/dragwidget.cpp \
     widgets/listgraph.cpp \
-    dialog/projectsettingsdialog.cpp
+    dialog/projectsettingsdialog.cpp \
+    graphicview.cpp \
+    graphicscene.cpp \
+    widgets/graphicwidget.cpp \
+    widgets/cornerN.cpp
 
 HEADERS  += mainwindow.h \
     easypaintenums.h \
     imagearea.h \
     widgets/dragwidget.h \
     widgets/listgraph.h \
-    dialog/projectsettingsdialog.h
+    dialog/projectsettingsdialog.h \
+    graphicview.h \
+    graphicscene.h \
+    widgets/graphicwidget.h \
+    widgets/cornerN.h
 
 RESOURCES += \
     resources.qrc

@@ -14,7 +14,7 @@ ListGraph::ListGraph(QWidget *_p):QTreeView(_p)
     _root=new QStandardItem(tr("Sessions"));
 
     _root->setEditable(false);
-    _root->setIcon(QIcon(":/liste/logos/root.gif"));
+    _root->setIcon(QIcon("://media/actions-icons/document-open.png"));
 
     //_modele->setItem(0,_root);
     _modele->appendRow(_root);
