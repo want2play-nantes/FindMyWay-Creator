@@ -70,7 +70,7 @@ void MainWindow::initializeTabWidget()
 */
     treeView = new ListGraph(this);
 
-    sc = new Graphicscene(":/map/plans/10_14_01.png");
+    sc = new Graphicscene(":/plans/plans/10_14_00a.png");
     gr = new GraphicView(sc);
     gr->setEnabled(true);
     gr->setDragMode(QGraphicsView::RubberBandDrag);
@@ -111,10 +111,15 @@ void MainWindow::initializeTabWidget()
 
 }
 
-void MainWindow::initializeNewTab(const QString &filePath)
+bool MainWindow::initializeNewTab(const QString &filePath)
 {
+//<<<<<<< HEAD
  /*   if (filePath.isEmpty())
         return;
+=======
+    if (filePath.isEmpty())
+        return false;
+>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
 
     QString tabName(tr("Untitled Image"));
 
@@ -137,9 +142,14 @@ void MainWindow::initializeNewTab(const QString &filePath)
 
     setWindowTitle(QString("%1 - Find my way").arg(tabName));
 
+<<<<<<< HEAD
     //treeView->nouveau_liste_item(tabName);
 
 */
+
+//=======
+//   return true;
+//>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
 }
 
 void MainWindow::initializeMainMenu()
@@ -252,10 +262,93 @@ void MainWindow::initializeDragbalWidget()
 
     //this->setAcceptDrops(true);
     drg1 = new DragWidget(this);
-
     scrollArea->setWidget(drg1);
 
+/*<<<<<<< HEAD
 
+
+=======
+    drg2 = new DragWidget(this);
+    drg3 = new DragWidget(this);
+    drg4 = new DragWidget(this);
+    drg5 = new DragWidget(this);
+
+    QLabel *boatIcon = new QLabel(this);
+    boatIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    boatIcon->move(0, 50);
+    boatIcon->show();
+    boatIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+    QLabel *boatIcontext = new QLabel(this);
+    boatIcontext->show();
+    boatIcontext->move(0, 50);
+    boatIcontext->setText("salle");
+
+    QLabel *carIcon = new QLabel(this);
+    carIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    carIcon->move(0, 60);
+    carIcon->show();
+    carIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+
+    QLabel *boatIcontext2 = new QLabel(this);
+    boatIcontext2->show();
+    boatIcontext2->move(0, 50);
+    boatIcontext2->setText("escalier");
+
+    QLabel *houseIcon = new QLabel(this);
+    houseIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    houseIcon->move(0, 150);
+    houseIcon->show();
+    houseIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+    QLabel *boatIcontext3 = new QLabel(this);
+    boatIcontext3->show();
+    boatIcontext3->move(0, 150);
+    boatIcontext3->setText("porte");
+
+    QLabel *houseIcon2 = new QLabel(this);
+    houseIcon2->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    houseIcon2->move(0, 200);
+    houseIcon2->show();
+    houseIcon2->setAttribute(Qt::WA_DeleteOnClose);
+
+    QLabel *boatIcontext4 = new QLabel(this);
+    boatIcontext4->show();
+    boatIcontext4->move(0, 200);
+    boatIcontext4->setText("fenetre");
+
+    QLabel *houseIcon3 = new QLabel(this);
+    houseIcon3->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    houseIcon3->move(0, 200);
+    houseIcon3->show();
+    houseIcon3->setAttribute(Qt::WA_DeleteOnClose);
+
+    QLabel *boatIcontext5 = new QLabel(this);
+    boatIcontext5->show();
+    boatIcontext5->move(0, 200);
+    boatIcontext5->setText("porte principale");
+
+    drg1->addWidget(boatIcon);
+    drg1->addWidget(boatIcontext);
+    ui->verticalLayout1->addWidget(drg1);
+    drg2->addWidget(carIcon);
+    drg2->addWidget(boatIcontext2);
+    ui->verticalLayout_2->addWidget(drg2);
+    drg3->addWidget(houseIcon);
+    drg3->addWidget(boatIcontext3);
+    ui->verticalLayout_3->addWidget(drg3);
+    drg4->addWidget(houseIcon2);
+    drg4->addWidget(boatIcontext4);
+    ui->verticalLayout_4->addWidget(drg4);
+    drg5->addWidget(houseIcon3);
+    drg5->addWidget(boatIcontext5);
+    ui->verticalLayout_5->addWidget(drg5);
+
+    // ui->verticalLayout->addWidget(drg);
+    // addToolBar(Qt::RightToolBarArea, drg);
+>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
+*/
 }
 
 ImageArea* MainWindow::getCurrentImageArea()
@@ -328,13 +421,15 @@ void MainWindow::newAct()
 
     if (projectSettingsDialog.exec() == QDialog::Accepted)
     {
-        initializeNewTab(projectSettingsDialog.getMapPath());
+        if (initializeNewTab(projectSettingsDialog.getMapPath()))
+        {
+            treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
+        }
 
        // sc->setLayerFile(projectSettingsDialog.getFileName());
 
 
         //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-        treeView->nouveau_liste_item(getCurrentImageArea()->getFileName());
 
         //QMessageBox msgBox;
         //msgBox.setText("Création d'un nouveau fichier avec les informations entrées.");
