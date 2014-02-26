@@ -1,9 +1,11 @@
 #include <QtGui>
 
 #include "dragwidget.h"
+#include<QVBoxLayout>
+
 
 DragWidget::DragWidget(QWidget *parent)
-    : QToolBar(parent)
+    : QFrame(parent)
 {
 #if defined(Q_OS_SYMBIAN) || defined(Q_WS_MAEMO_5) || defined(Q_WS_SIMULATOR)
 #else
@@ -11,7 +13,76 @@ DragWidget::DragWidget(QWidget *parent)
 #endif
     //setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     setAcceptDrops(false);
+    QVBoxLayout *conteneur = new QVBoxLayout;
 
+    QLabel *boatIcon = new QLabel(this);
+        boatIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+        boatIcon->move(0, 50);
+        boatIcon->show();
+        boatIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+        QLabel *boatIcontext = new QLabel(this);
+        boatIcontext->show();
+        boatIcontext->move(0, 50);
+        boatIcontext->setText("salle");
+
+        QLabel *carIcon = new QLabel(this);
+        carIcon->setPixmap(QPixmap(":/logos/logos/escalier.png"));
+        carIcon->move(0, 60);
+        carIcon->show();
+        carIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+
+        QLabel *boatIcontext2 = new QLabel(this);
+        boatIcontext2->show();
+        boatIcontext2->move(0, 50);
+        boatIcontext2->setText("escalier");
+
+        QLabel *houseIcon = new QLabel(this);
+        houseIcon->setPixmap(QPixmap(":/logos/logos/porte.png"));
+        houseIcon->move(0, 150);
+        houseIcon->show();
+        houseIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+        QLabel *boatIcontext3 = new QLabel(this);
+        boatIcontext3->show();
+        boatIcontext3->move(0, 150);
+        boatIcontext3->setText("porte");
+
+        QLabel *houseIcon2 = new QLabel(this);
+        houseIcon2->setPixmap(QPixmap(":/logos/logos/ascenseur.png"));
+        houseIcon2->move(0, 200);
+        houseIcon2->show();
+        houseIcon2->setAttribute(Qt::WA_DeleteOnClose);
+
+        QLabel *boatIcontext4 = new QLabel(this);
+        boatIcontext4->show();
+        boatIcontext4->move(0, 200);
+        boatIcontext4->setText("Ascenseur");
+
+        QLabel *houseIcon3 = new QLabel(this);
+        houseIcon3->setPixmap(QPixmap(":/logos/logos/portePrin.png"));
+        houseIcon3->move(0, 200);
+        houseIcon3->show();
+        houseIcon3->setAttribute(Qt::WA_DeleteOnClose);
+
+        QLabel *boatIcontext5 = new QLabel(this);
+        boatIcontext5->show();
+        boatIcontext5->move(0, 200);
+        boatIcontext5->setText("porte principale");
+
+
+        conteneur->addWidget(boatIcon,0,0);
+        conteneur->addWidget(boatIcontext);
+        conteneur->addWidget(carIcon);
+        conteneur->addWidget(boatIcontext2);
+        conteneur->addWidget(houseIcon);
+        conteneur->addWidget(boatIcontext3);
+        conteneur->addWidget(houseIcon2);
+        conteneur->addWidget(boatIcontext4);
+        conteneur->addWidget(houseIcon3);
+        conteneur->addWidget(boatIcontext5);
+         this->setLayout(conteneur);
 
 }
 

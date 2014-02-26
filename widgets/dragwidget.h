@@ -6,7 +6,7 @@
 class QDragEnterEvent;
 class QDropEvent;
 
-class DragWidget : public QToolBar
+class DragWidget : public QFrame
 {
 public:
     DragWidget(QWidget *parent=0);

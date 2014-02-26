@@ -7,8 +7,11 @@
 #include <QtCore/QMap>
 #include <QHBoxLayout>
 #include <QGraphicsView>
+#include <QSplitter>
 #include "widgets/dragwidget.h"
 #include "widgets/listgraph.h"
+#include "graphicscene.h"
+#include "graphicview.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -52,8 +55,10 @@ private:
 
     QStatusBar *mStatusBar;
     QTabWidget *mTabWidget;
+    QTabWidget *tabWidget1,*tabWidget2,*tabWidget3;
     QTreeView *mSession;
     QLayout *mlayout,*mprincipale;
+    QHBoxLayout *layout,*layout2;
     DragWidget *drg1,*drg2,*drg3,*drg4,*drg5;
     QLabel *mSizeLabel, *mPosLabel,*mColorPreviewLabel, *mColorRGBLabel;
 
@@ -64,6 +69,12 @@ private:
     QHBoxLayout *horizontalLayout;
 
     ListGraph *treeView;
+    QSplitter *splitter,*splitter2;
+    QWidget *widget;
+    GraphicView *gr;
+    Graphicscene *sc;
+    DragWidget *componentsView;
+    QScrollArea *scrollArea;
 
 private slots:
     void activateTab(const int &index);
@@ -81,6 +92,9 @@ private slots:
 
     void enableActions(int index);
 
+    void on_actionNouveau_triggered();
+    void on_actionFermer_Fenetre_triggered();
+    void on_actionHelp_triggered();
 };
 
 #endif // MAINWINDOW_H

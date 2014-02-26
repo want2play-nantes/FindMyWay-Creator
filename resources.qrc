@@ -26,9 +26,26 @@
         <file>media/actions-icons/clear-gray.png</file>
     </qresource>
     <qresource prefix="/logos">
+        <file>logos/b.png</file>
+        <file>logos/a.png</file>
+        <file>logos/ascenseur.png</file>
+        <file>logos/escalier.png</file>
+        <file>logos/porte.png</file>
+        <file>logos/portePrin.png</file>
         <file>logos/salle.png</file>
     </qresource>
+<<<<<<< HEAD
     <qresource lang="DTD" prefix="/data">
         <file>data.dtd</file>
+=======
+    <qresource prefix="/plans">
+        <file>plans/10_14_00a.png</file>
+        <file>plans/10_14_00b.png</file>
+        <file>plans/10_14_01.png</file>
+        <file>plans/10_14_02.png</file>
+        <file>plans/10_15_00.png</file>
+        <file>plans/10_15_01.png</file>
+        <file>plans/10_15_S0.png</file>
+>>>>>>> b67e33d1a688b777088c8ba75fe764a84c8c1072
     </qresource>
 </RCC>

@@ -34,7 +34,6 @@ ImageArea::ImageArea(const QString &filePath, QWidget *parent) :
     initializeImage();
     mZoomFactor = 1;
 
-    setAcceptDrops(true);
 
     mZoomedFactor = 1;
 

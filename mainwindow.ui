@@ -60,32 +60,54 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>731</width>
-             <height>653</height>
+             <width>525</width>
+             <height>609</height>
             </rect>
            </property>
-           <zorder></zorder>
           </widget>
          </widget>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,0">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
+        </property>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout1"/>
+         <layout class="QVBoxLayout" name="verticalLayout1">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+         </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2"/>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+         </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+         </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4"/>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+         </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5"/>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+         </layout>
         </item>
        </layout>
       </item>
@@ -103,8 +125,75 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNouveau"/>
+   <addaction name="actionSauvegarder"/>
+   <addaction name="actionSauvegarder_Sous"/>
+   <addaction name="actionFermer_Fenetre"/>
+   <addaction name="actionHelp"/>
   </widget>
+  <action name="actionNouveau">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/document-new.png</normaloff>:/media/actions-icons/document-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>Nouveau</string>
+   </property>
+   <property name="toolTip">
+    <string>Nouveau</string>
+   </property>
+  </action>
+  <action name="actionSauvegarder">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/document-save.png</normaloff>:/media/actions-icons/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sauvegarder</string>
+   </property>
+   <property name="toolTip">
+    <string>Sauvegarder</string>
+   </property>
+  </action>
+  <action name="actionSauvegarder_Sous">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/document-save-as.png</normaloff>:/media/actions-icons/document-save-as.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sauvegarder_Sous</string>
+   </property>
+   <property name="toolTip">
+    <string>Sauvegarder Sous</string>
+   </property>
+  </action>
+  <action name="actionFermer_Fenetre">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/window-close.png</normaloff>:/media/actions-icons/window-close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fermer_Fenetre</string>
+   </property>
+   <property name="toolTip">
+    <string>Fermer la fenetre</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset theme="Help" resource="resources.qrc">
+     <normaloff>:/media/actions-icons/help-about.png</normaloff>:/media/actions-icons/help-about.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="toolTip">
+    <string>Help</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

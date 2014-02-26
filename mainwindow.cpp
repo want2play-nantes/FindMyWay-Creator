@@ -23,16 +23,15 @@ MainWindow::MainWindow(QStringList filePaths, QWidget *parent) : QMainWindow(par
     ui->setupUi(this);
 
     // Icone de l'application
-    setWindowIcon(QIcon(":/media/logo/FindMyWAy.png"));
+    setWindowIcon(QIcon("://media/actions-icons/clear-gray.png"));
 
     // Initialisation des menus
     initializeMainMenu();
 
-    // Initialisation des tabs
-    initializeTabWidget();
+
 
     // Initialisation de la liste
-    initilizeSession();
+   // initilizeSession();
 
     // Initialisation des zones de drag & drop
     initializeDragbalWidget();
@@ -40,6 +39,12 @@ MainWindow::MainWindow(QStringList filePaths, QWidget *parent) : QMainWindow(par
     horizontalLayout = new QHBoxLayout;
 
     setCentralWidget(this->centralWidget());
+
+
+    // Initialisation des tabs
+    initializeTabWidget();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -49,7 +54,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeTabWidget()
 {
-    mTabWidget = new QTabWidget(this);
+  /*  mTabWidget = new QTabWidget(this);
 
     mTabWidget->setUsesScrollButtons(true);
     mTabWidget->setTabsClosable(true);
@@ -62,30 +67,89 @@ void MainWindow::initializeTabWidget()
     connect(mTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
     ui->scrollArea->setWidget(mTabWidget);
+*/
+    treeView = new ListGraph(this);
+
+    sc = new Graphicscene(":/plans/plans/10_14_00a.png");
+    gr = new GraphicView(sc);
+    gr->setEnabled(true);
+    gr->setDragMode(QGraphicsView::RubberBandDrag);
+
+    gr->show();
+
+    layout = new QHBoxLayout;
+    widget = new QWidget;
+    widget->setLayout(layout);
+
+    splitter= new QSplitter(this);
+    splitter2= new QSplitter(this);
+
+    tabWidget1= new QTabWidget;
+    tabWidget2= new QTabWidget;
+    tabWidget3= new QTabWidget;
+
+    tabWidget1->addTab(treeView,QIcon("://media/instruments-icons/rectangle.png"),"Projects");
+
+    QString str("10_14_01.png");
+    treeView->nouveau_liste_item(str);
+    splitter->addWidget(tabWidget1);
+
+    layout->addWidget(splitter,2);
+
+    tabWidget2->addTab(gr,QIcon("://media/instruments-icons/rectangle.png"),"Works area");
+
+    splitter2->addWidget(tabWidget2);
+
+    layout->addWidget(splitter2,8);
+
+
+
+    tabWidget3->addTab(scrollArea,QIcon("://media/instruments-icons/rectangle.png"),"Drag&drop");
+    layout->addWidget(tabWidget3,2);
+    setCentralWidget(widget);
+
 
 }
 
 bool MainWindow::initializeNewTab(const QString &filePath)
 {
+//<<<<<<< HEAD
+ /*   if (filePath.isEmpty())
+        return;
+=======
     if (filePath.isEmpty())
         return false;
+>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
 
     QString tabName(tr("Untitled Image"));
 
     ImageArea *imageArea = new ImageArea(filePath, this);
     tabName = imageArea->getFileName();
+   // sc = new Graphicscene(filePath);
+
 
     QScrollArea * scrollArea = new QScrollArea();
     scrollArea->setAttribute(Qt::WA_DeleteOnClose);
     scrollArea->setBackgroundRole(QPalette::Dark);
     scrollArea->setWidget(imageArea);
-
-    mTabWidget->addTab(scrollArea, tabName);
+   // treeView->nouveau_liste_item(filePath);
+    mTabWidget->addTab(scrollArea, filePath);
     mTabWidget->setCurrentIndex(mTabWidget->count()-1);
+    /*QGraphicsView *qw = new QGraphicsView(this);
+    qw->setScene(sc);
+
+
 
     setWindowTitle(QString("%1 - Find my way").arg(tabName));
 
-    return true;
+<<<<<<< HEAD
+    //treeView->nouveau_liste_item(tabName);
+
+*/
+
+//=======
+//   return true;
+//>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
 }
 
 void MainWindow::initializeMainMenu()
@@ -171,8 +235,17 @@ void MainWindow::initilizeSession(){
 
 void MainWindow::initializeDragbalWidget()
 {
-    this->setAcceptDrops(true);
+
+    scrollArea = new QScrollArea;
+
+    //this->setAcceptDrops(true);
     drg1 = new DragWidget(this);
+    scrollArea->setWidget(drg1);
+
+/*<<<<<<< HEAD
+
+
+=======
     drg2 = new DragWidget(this);
     drg3 = new DragWidget(this);
     drg4 = new DragWidget(this);
@@ -252,7 +325,8 @@ void MainWindow::initializeDragbalWidget()
 
     // ui->verticalLayout->addWidget(drg);
     // addToolBar(Qt::RightToolBarArea, drg);
-
+>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
+*/
 }
 
 ImageArea* MainWindow::getCurrentImageArea()
@@ -329,6 +403,9 @@ void MainWindow::newAct()
         {
             treeView->addItem(getCurrentImageArea()->getFileName());
         }
+
+       // sc->setLayerFile(projectSettingsDialog.getFileName());
+
 
         //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
 
@@ -426,12 +503,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 bool MainWindow::isSomethingModified()
 {
-    for(int i = 0; i < mTabWidget->count(); ++i)
+    /*for(int i = 0; i < mTabWidget->count(); ++i)
     {
         if(getImageAreaByIndex(i)->getEdited())
             return true;
     }
-    return false;
+    return false;*/
 }
 
 bool MainWindow::closeAllTabs()
@@ -479,4 +556,19 @@ void MainWindow::helpAct()
                        QString("Project IHM M1 ALMA")
                        .arg(tr("version")).arg("0.1.0").arg(tr("Site")).arg(tr("Authors"))
                        .arg(tr("If you like <b>FindMyWay</b> and you want to share your opinion, or send a bug report, or want to suggest new features, we are waiting for you on our <a>arafet.ferdjani@gmail.com</a>.")));
+}
+
+void MainWindow::on_actionNouveau_triggered()
+{
+    newAct();
+}
+
+void MainWindow::on_actionFermer_Fenetre_triggered()
+{
+    sc->deleteComponents();
+}
+
+void MainWindow::on_actionHelp_triggered()
+{
+    helpAct();
 }
