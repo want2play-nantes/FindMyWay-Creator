@@ -26,11 +26,15 @@
         <file>media/actions-icons/clear-gray.png</file>
     </qresource>
     <qresource prefix="/logos">
-        <file>logos/salle.png</file>
         <file>logos/b.png</file>
         <file>logos/a.png</file>
+        <file>logos/ascenseur.png</file>
+        <file>logos/escalier.png</file>
+        <file>logos/porte.png</file>
+        <file>logos/portePrin.png</file>
+        <file>logos/salle.png</file>
     </qresource>
-    <qresource prefix="/map">
+    <qresource prefix="/plans">
         <file>plans/10_14_00a.png</file>
         <file>plans/10_14_00b.png</file>
         <file>plans/10_14_01.png</file>

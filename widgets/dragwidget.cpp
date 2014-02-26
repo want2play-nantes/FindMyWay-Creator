@@ -27,7 +27,7 @@ DragWidget::DragWidget(QWidget *parent)
         boatIcontext->setText("salle");
 
         QLabel *carIcon = new QLabel(this);
-        carIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+        carIcon->setPixmap(QPixmap(":/logos/logos/escalier.png"));
         carIcon->move(0, 60);
         carIcon->show();
         carIcon->setAttribute(Qt::WA_DeleteOnClose);
@@ -39,7 +39,7 @@ DragWidget::DragWidget(QWidget *parent)
         boatIcontext2->setText("escalier");
 
         QLabel *houseIcon = new QLabel(this);
-        houseIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+        houseIcon->setPixmap(QPixmap(":/logos/logos/porte.png"));
         houseIcon->move(0, 150);
         houseIcon->show();
         houseIcon->setAttribute(Qt::WA_DeleteOnClose);
@@ -50,7 +50,7 @@ DragWidget::DragWidget(QWidget *parent)
         boatIcontext3->setText("porte");
 
         QLabel *houseIcon2 = new QLabel(this);
-        houseIcon2->setPixmap(QPixmap(":/logos/logos/salle.png"));
+        houseIcon2->setPixmap(QPixmap(":/logos/logos/ascenseur.png"));
         houseIcon2->move(0, 200);
         houseIcon2->show();
         houseIcon2->setAttribute(Qt::WA_DeleteOnClose);
@@ -61,7 +61,7 @@ DragWidget::DragWidget(QWidget *parent)
         boatIcontext4->setText("Ascenseur");
 
         QLabel *houseIcon3 = new QLabel(this);
-        houseIcon3->setPixmap(QPixmap(":/logos/logos/salle.png"));
+        houseIcon3->setPixmap(QPixmap(":/logos/logos/portePrin.png"));
         houseIcon3->move(0, 200);
         houseIcon3->show();
         houseIcon3->setAttribute(Qt::WA_DeleteOnClose);

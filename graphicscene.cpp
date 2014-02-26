@@ -155,16 +155,15 @@ void Graphicscene::deleteComponents(){
     QList<QGraphicsItem*> *itemsSelected = new QList<QGraphicsItem*>();
     *itemsSelected = this->selectedItems();
 
-    //Boucle pour la suppression de tous les éléments de la liste
+
     if(!(itemsSelected->isEmpty())){
 
         this->removeItem(itemsSelected->first());
 
 
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Delete results");
-        msgBox.setText("The selected component had been removed of editing view.");
-        //msgBox.setInformativeText("We advice you to choose another one and try again.");
+        msgBox.setWindowTitle("Find my way");
+        msgBox.setText("The Object selected was deleted seccessfully");
         msgBox.setStandardButtons(QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Cancel);
         msgBox.exec();
@@ -173,9 +172,8 @@ void Graphicscene::deleteComponents(){
     }else {
 
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Delete results");
-        msgBox.setText("Nothing to remove.");
-        msgBox.setInformativeText("Please select a item and try again.");
+        msgBox.setWindowTitle("Find my way");
+        msgBox.setInformativeText("Warning: Your selection does not containt the component , Please Select the component first and then try again.");
         msgBox.setStandardButtons(QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Cancel);
         msgBox.exec();
