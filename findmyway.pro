@@ -26,19 +26,16 @@ SOURCES += main.cpp\
     widgets/dragwidget.cpp \
     widgets/listgraph.cpp \
     dialog/projectsettingsdialog.cpp \
-<<<<<<< HEAD
     core/map.cpp \
     core/node.cpp \
     core/edge.cpp \
     core/nodes/classroom.cpp \
     core/pathnode.cpp \
-    core/finalnode.cpp
-=======
+    core/finalnode.cpp \
     graphicview.cpp \
     graphicscene.cpp \
     widgets/graphicwidget.cpp \
     widgets/cornerN.cpp
->>>>>>> b67e33d1a688b777088c8ba75fe764a84c8c1072
 
 HEADERS  += mainwindow.h \
     easypaintenums.h \
@@ -46,19 +43,16 @@ HEADERS  += mainwindow.h \
     widgets/dragwidget.h \
     widgets/listgraph.h \
     dialog/projectsettingsdialog.h \
-<<<<<<< HEAD
     core/map.h \
     core/node.h \
     core/edge.h \
     core/nodes/classroom.h \
     core/pathnode.h \
-    core/finalnode.h
-=======
+    core/finalnode.h \
     graphicview.h \
     graphicscene.h \
     widgets/graphicwidget.h \
     widgets/cornerN.h
->>>>>>> b67e33d1a688b777088c8ba75fe764a84c8c1072
 
 RESOURCES += \
     resources.qrc

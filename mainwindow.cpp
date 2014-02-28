@@ -91,7 +91,7 @@ void MainWindow::initializeTabWidget()
     tabWidget1->addTab(treeView,QIcon("://media/instruments-icons/rectangle.png"),"Projects");
 
     QString str("10_14_01.png");
-    treeView->nouveau_liste_item(str);
+    treeView->addItem(str);
     splitter->addWidget(tabWidget1);
 
     layout->addWidget(splitter,2);
@@ -113,13 +113,9 @@ void MainWindow::initializeTabWidget()
 
 bool MainWindow::initializeNewTab(const QString &filePath)
 {
-//<<<<<<< HEAD
- /*   if (filePath.isEmpty())
-        return;
-=======
+    /*
     if (filePath.isEmpty())
         return false;
->>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
 
     QString tabName(tr("Untitled Image"));
 
@@ -142,14 +138,10 @@ bool MainWindow::initializeNewTab(const QString &filePath)
 
     setWindowTitle(QString("%1 - Find my way").arg(tabName));
 
-<<<<<<< HEAD
     //treeView->nouveau_liste_item(tabName);
 
+    return true;
 */
-
-//=======
-//   return true;
-//>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
 }
 
 void MainWindow::initializeMainMenu()
@@ -242,10 +234,7 @@ void MainWindow::initializeDragbalWidget()
     drg1 = new DragWidget(this);
     scrollArea->setWidget(drg1);
 
-/*<<<<<<< HEAD
-
-
-=======
+/*
     drg2 = new DragWidget(this);
     drg3 = new DragWidget(this);
     drg4 = new DragWidget(this);
@@ -325,7 +314,6 @@ void MainWindow::initializeDragbalWidget()
 
     // ui->verticalLayout->addWidget(drg);
     // addToolBar(Qt::RightToolBarArea, drg);
->>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
 */
 }
 
