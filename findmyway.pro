@@ -29,11 +29,18 @@ SOURCES += main.cpp\
     core/nodes/classroom.cpp \
     core/pathnode.cpp \
     core/finalnode.cpp \
+<<<<<<< HEAD
     core/link.cpp \
     core/unmapmanagement.cpp\
     widgets/graphicwidget.cpp \
     graphicsscene.cpp
 
+=======
+    graphicview.cpp \
+    graphicscene.cpp \
+    widgets/graphicwidget.cpp \
+    widgets/cornerN.cpp
+>>>>>>> 2397366b5e787a1dca2335a554b8d551d6846085
 
 HEADERS  += mainwindow.h \
     easypaintenums.h \
@@ -44,10 +51,17 @@ HEADERS  += mainwindow.h \
     core/nodes/classroom.h \
     core/pathnode.h \
     core/finalnode.h \
+<<<<<<< HEAD
     core/link.h \
     core/unmapmanagement.h \
     widgets/graphicwidget.h \
     graphicsscene.h
+=======
+    graphicview.h \
+    graphicscene.h \
+    widgets/graphicwidget.h \
+    widgets/cornerN.h
+>>>>>>> 2397366b5e787a1dca2335a554b8d551d6846085
 
 RESOURCES += \
     resources.qrc
