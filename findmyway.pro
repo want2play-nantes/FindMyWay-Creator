@@ -22,49 +22,33 @@ UI_DIR = build
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    widgets/dragwidget.cpp \
-    dialog/projectsettingsdialog.cpp \
-    core/map.cpp \
-    core/node.cpp \
-    core/nodes/classroom.cpp \
-    core/pathnode.cpp \
-    core/finalnode.cpp \
-<<<<<<< HEAD
-    core/link.cpp \
-    core/unmapmanagement.cpp\
-    widgets/graphicwidget.cpp \
-    graphicsscene.cpp
-
-=======
-    graphicview.cpp \
-    graphicscene.cpp \
-    widgets/graphicwidget.cpp \
-    widgets/cornerN.cpp
->>>>>>> 2397366b5e787a1dca2335a554b8d551d6846085
+        widgets/dragwidget.cpp \
+        widgets/graphicsscene.cpp \
+        widgets/graphicwidget.cpp \
+        dialog/projectsettingsdialog.cpp \
+        core/map.cpp \
+        core/node.cpp \
+        core/nodes/classroom.cpp \
+        core/pathnode.cpp \
+        core/finalnode.cpp \
+        core/link.cpp \
+        core/unmapmanagement.cpp
 
 HEADERS  += mainwindow.h \
-    easypaintenums.h \
-    widgets/dragwidget.h \
-    dialog/projectsettingsdialog.h \
-    core/map.h \
-    core/node.h \
-    core/nodes/classroom.h \
-    core/pathnode.h \
-    core/finalnode.h \
-<<<<<<< HEAD
-    core/link.h \
-    core/unmapmanagement.h \
-    widgets/graphicwidget.h \
-    graphicsscene.h
-=======
-    graphicview.h \
-    graphicscene.h \
-    widgets/graphicwidget.h \
-    widgets/cornerN.h
->>>>>>> 2397366b5e787a1dca2335a554b8d551d6846085
+        widgets/dragwidget.h \
+        widgets/graphicsscene.h \
+        widgets/graphicwidget.h \
+        dialog/projectsettingsdialog.h \
+        core/map.h \
+        core/node.h \
+        core/nodes/classroom.h \
+        core/pathnode.h \
+        core/finalnode.h \
+        core/link.h \
+        core/unmapmanagement.h
 
 RESOURCES += \
-    resources.qrc
+        resources.qrc
 
 target.path = /usr/bin
 translations.path = /usr/share/easypaint/translations

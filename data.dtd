@@ -1,17 +1,17 @@
-<!ELEMENT map (properties,graph)>
-
-<!ELEMENT properties (name,ufr,building,floor,part)>
-	<!ELEMENT name (#PCDATA)>
-	<!ELEMENT ufr (#PCDATA)>
-	<!ELEMENT building (#PCDATA)>
-	<!ELEMENT floor (#PCDATA)>
-	<!ELEMENT part (#PCDATA)>
+<!ELEMENT map (graph)>
 	
 <!ELEMENT graph (nodes,links)>
 	<!ELEMENT nodes (node*)>
 		<!ELEMENT node EMPTY>
 	<!ELEMENT links (link*)>
 		<!ELEMENT link EMPTY>
+		
+<!ATTLIST map name CDATA #REQUIRED>
+<!ATTLIST map ufr CDATA #REQUIRED>
+<!ATTLIST map building CDATA #REQUIRED>
+<!ATTLIST map floor CDATA #REQUIRED>
+<!ATTLIST map part CDATA #REQUIRED>
+<!ATTLIST map current-id CDATA #REQUIRED>
 		
 <!ATTLIST node id ID #REQUIRED>
 <!ATTLIST node type (classroom|stairs|elevator|pathnode) #REQUIRED>

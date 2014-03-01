@@ -12,7 +12,7 @@
 #include "dialog/projectsettingsdialog.h"
 
 #include <QGraphicsView>
-#include "graphicsscene.h"
+#include "widgets/graphicsscene.h"
 
 #include "core/map.h"
 

@@ -24,11 +24,7 @@
         <file>logos/portePrin.png</file>
         <file>logos/salle.png</file>
     </qresource>
-<<<<<<< HEAD
     <qresource prefix="/data" lang="DTD">
-=======
-    <qresource lang="DTD" prefix="/data">
->>>>>>> 2397366b5e787a1dca2335a554b8d551d6846085
         <file>data.dtd</file>
     </qresource>
 </RCC>
