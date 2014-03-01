@@ -6,7 +6,7 @@
 class Classroom : public FinalNode
 {
 public:
-    Classroom();
+    Classroom(Map *map, int x, int y);
 };
 
 #endif // CLASSROOM_H

@@ -7,6 +7,9 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QFile>
+#include <QMessageBox>
+
+#include "core/map.h"
 
 namespace Ui {
     class ProjectSettingsDialog;
@@ -34,8 +37,10 @@ public:
     QString getMapPath() const;
     void setMapPath(const QString &value);
 
-    bool getEditable() const;
-    void setEditable(bool value);
+    void setEditable(Map *map);
+
+    int getPart() const;
+    void setPart(const int &value);
 
 private slots:
     void on_ufrRef_valueChanged(int value);
@@ -52,17 +57,19 @@ private slots:
 
     void on_part_valueChanged(int arg1);
 
+    void on_buttonBox_accepted();
+
 private:
     Ui::ProjectSettingsDialog *ui;
 
     int building;
     int floor;
     int ufrRef;
-    QString part;
+    int part;
     QString fileName;
     QString mapPath;
 
-    bool editable;
+    Map * map;
 
     void refreshFileName();
 };

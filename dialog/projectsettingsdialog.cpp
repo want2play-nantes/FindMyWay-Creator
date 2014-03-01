@@ -2,21 +2,21 @@
 #include "projectsettingsdialog.h"
 #include "ui_projectsettingsdialog.h"
 
-#include <QMessageBox>
-
 ProjectSettingsDialog::ProjectSettingsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProjectSettingsDialog),
     ufrRef(10),
     building(1),
     floor(0),
-    editable(true)
+    part(0),
+    map(NULL)
 {
     ui->setupUi(this);
     ui->ufrRef->setValue(this->ufrRef);
     ui->buildingNumber->setValue(this->building);
     ui->floor->setValue(this->floor);
 
+    // TODO : Déforme l'image, il faut scaler manuellement ou trouver mieux
     ui->imagePreview->setScaledContents(true);
 
     ui->part->setEnabled(false);
@@ -37,18 +37,24 @@ ProjectSettingsDialog::~ProjectSettingsDialog()
 QString ProjectSettingsDialog::getMapPath() const { return mapPath; }
 void ProjectSettingsDialog::setMapPath(const QString &value) { mapPath = value; }
 
-bool ProjectSettingsDialog::getEditable() const { return editable; }
-
-void ProjectSettingsDialog::setEditable(bool value)
+void ProjectSettingsDialog::setEditable(Map * map)
 {
-    editable = value;
+    this->map = map;
 
-    if (!editable) {
-        ui->browseButton->setEnabled(false);
+    ui->ufrRef->setValue(map->getUfrRef());
+    ui->buildingNumber->setValue(map->getBuilding());
+    ui->floor->setValue(map->getFloor());
+
+    if (map->getPart() > 0)
+    {
+        ui->part->setEnabled(true);
+        ui->part->setValue(map->getPart());
     }
-    else {
-        ui->browseButton->setEnabled(true);
-    }
+
+    ui->imagePreview->setPixmap(*map->getImg());
+
+    ui->browseButton->setEnabled(false);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 
@@ -62,6 +68,9 @@ void ProjectSettingsDialog::setFloor(int value) { floor = value; }
 
 int ProjectSettingsDialog::getBuilding() const { return building; }
 void ProjectSettingsDialog::setBuilding(int value) { building = value; }
+
+int ProjectSettingsDialog::getPart() const { return part; }
+void ProjectSettingsDialog::setPart(const int &value) { part = value; }
 
 void ProjectSettingsDialog::refreshFileName()
 {
@@ -77,8 +86,8 @@ void ProjectSettingsDialog::refreshFileName()
     else
         tFileName += "S" + QString::number(-floor - 1);
 
-    if (!part.isEmpty()) {
-        tFileName += part;
+    if (part != 0) {
+        tFileName += QString(QChar(part+96));
     }
 
     this->fileName = tFileName;
@@ -133,8 +142,9 @@ void ProjectSettingsDialog::on_mapPath_textChanged(const QString &text)
     {
         QPixmap image(text);
 
-        // Ne fonctionne pas, l'image n'est pas scale
-        image.scaled(125, 75, Qt::KeepAspectRatio, Qt::FastTransformation);
+        // TODO : Ne fonctionne pas, l'image n'est pas scale
+        image.scaled(ui->imagePreview->width(), ui->imagePreview->height(), Qt::KeepAspectRatio);
+
 
         ui->imagePreview->setPixmap(image);
     }
@@ -145,12 +155,12 @@ void ProjectSettingsDialog::on_partCheckBox_stateChanged(int status)
     if (status == Qt::Checked)
     {
         ui->part->setEnabled(true);
-        part = QString(QChar(ui->part->value()+96));
+        part = ui->part->value();
     }
     else if (status == Qt::Unchecked)
     {
         ui->part->setEnabled(false);
-        part = "";
+        part = 0;
     }
 
     refreshFileName();
@@ -158,6 +168,17 @@ void ProjectSettingsDialog::on_partCheckBox_stateChanged(int status)
 
 void ProjectSettingsDialog::on_part_valueChanged(int value)
 {
-    this->part = QString(QChar(ui->part->value()+96));
+    this->part = value;
     refreshFileName();
+}
+
+void ProjectSettingsDialog::on_buttonBox_accepted()
+{
+    if (map) {
+        map->setFileName(fileName);
+        map->setUfrRef(ufrRef);
+        map->setBuilding(building);
+        map->setFloor(floor);
+        map->setPart(part);
+    }
 }

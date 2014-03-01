@@ -1,12 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>media/instruments-icons/cursor.png</file>
-        <file>media/instruments-icons/ellipse.png</file>
-        <file>media/instruments-icons/line.png</file>
-        <file>media/instruments-icons/loupe.png</file>
-        <file>media/instruments-icons/rectangle.png</file>
-        <file>media/instruments-icons/cursor_loupe.png</file>
-        <file>media/actions-icons/application-exit.png</file>
         <file>media/actions-icons/document-new.png</file>
         <file>media/actions-icons/document-open.png</file>
         <file>media/actions-icons/document-properties.png</file>
@@ -18,34 +11,20 @@
         <file>media/actions-icons/edit-redo.png</file>
         <file>media/actions-icons/edit-undo.png</file>
         <file>media/actions-icons/help-about.png</file>
-        <file>media/actions-icons/object-rotate-left.png</file>
-        <file>media/actions-icons/object-rotate-right.png</file>
         <file>media/actions-icons/window-close.png</file>
         <file>media/actions-icons/zoom-in.png</file>
         <file>media/actions-icons/zoom-out.png</file>
-        <file>media/actions-icons/clear-gray.png</file>
+        <file>media/actions-icons/mode-creation.png</file>
+        <file>media/actions-icons/mode-link.png</file>
     </qresource>
     <qresource prefix="/logos">
-        <file>logos/b.png</file>
-        <file>logos/a.png</file>
         <file>logos/ascenseur.png</file>
         <file>logos/escalier.png</file>
         <file>logos/porte.png</file>
         <file>logos/portePrin.png</file>
         <file>logos/salle.png</file>
     </qresource>
-<<<<<<< HEAD
-    <qresource lang="DTD" prefix="/data">
+    <qresource prefix="/data" lang="DTD">
         <file>data.dtd</file>
-=======
-    <qresource prefix="/plans">
-        <file>plans/10_14_00a.png</file>
-        <file>plans/10_14_00b.png</file>
-        <file>plans/10_14_01.png</file>
-        <file>plans/10_14_02.png</file>
-        <file>plans/10_15_00.png</file>
-        <file>plans/10_15_01.png</file>
-        <file>plans/10_15_S0.png</file>
->>>>>>> b67e33d1a688b777088c8ba75fe764a84c8c1072
     </qresource>
 </RCC>

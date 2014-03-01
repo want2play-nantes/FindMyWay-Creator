@@ -7,18 +7,18 @@
 	<!ELEMENT floor (#PCDATA)>
 	<!ELEMENT part (#PCDATA)>
 	
-<!ELEMENT graph (nodes,edges)>
+<!ELEMENT graph (nodes,links)>
 	<!ELEMENT nodes (node*)>
 		<!ELEMENT node EMPTY>
-	<!ELEMENT edges (edge*)>
-		<!ELEMENT edge EMPTY>
+	<!ELEMENT links (link*)>
+		<!ELEMENT link EMPTY>
 		
 <!ATTLIST node id ID #REQUIRED>
 <!ATTLIST node type (classroom|stairs|elevator|pathnode) #REQUIRED>
 <!ATTLIST node x CDATA #REQUIRED>
 <!ATTLIST node y CDATA #REQUIRED>
 
-<!ATTLIST edge from IDREF #REQUIRED>
-<!ATTLIST edge to IDREF #REQUIRED>
-<!ATTLIST edge distance CDATA #REQUIRED>
-<!ATTLIST edge map CDATA #IMPLIED>
+<!ATTLIST link from IDREF #REQUIRED>
+<!ATTLIST link to IDREF #REQUIRED>
+<!ATTLIST link distance CDATA #REQUIRED>
+<!ATTLIST link map CDATA #IMPLIED>

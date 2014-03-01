@@ -6,118 +6,47 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>995</width>
-    <height>699</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Find My May - Map Creator</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonTextBesideIcon</enum>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,3,1">
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Work Space</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTreeView" name="treeView"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Area of work</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QScrollArea" name="scrollArea">
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>525</width>
-             <height>609</height>
-            </rect>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0,0,0,0">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
-        </property>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout1">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-         </layout>
-        </item>
-       </layout>
-      </item>
-     </layout>
+     <layout class="QHBoxLayout" name="horizontalLayout"/>
     </item>
    </layout>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::NoToolBarArea</set>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonFollowStyle</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -126,69 +55,196 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNouveau"/>
-   <addaction name="actionSauvegarder"/>
-   <addaction name="actionSauvegarder_Sous"/>
-   <addaction name="actionFermer_Fenetre"/>
-   <addaction name="actionHelp"/>
+   <addaction name="actionOuvrir"/>
+   <addaction name="actionEnregistrer"/>
+   <addaction name="actionFermer"/>
+   <addaction name="separator"/>
+   <addaction name="actionModeCreation"/>
+   <addaction name="actionModeLiaison"/>
+   <addaction name="separator"/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFichier">
+    <property name="title">
+     <string>Fichier</string>
+    </property>
+    <addaction name="actionNouveau"/>
+    <addaction name="actionOuvrir"/>
+    <addaction name="actionEnregistrer"/>
+    <addaction name="actionFermer"/>
+    <addaction name="separator"/>
+    <addaction name="actionProprietes"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuitter"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>?</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuEdition">
+    <property name="title">
+     <string>Edition</string>
+    </property>
+    <addaction name="actionModeCreation"/>
+    <addaction name="actionModeLiaison"/>
+   </widget>
+   <addaction name="menuFichier"/>
+   <addaction name="menuEdition"/>
+   <addaction name="menu"/>
   </widget>
   <action name="actionNouveau">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/media/actions-icons/document-new.png</normaloff>:/media/actions-icons/document-new.png</iconset>
    </property>
    <property name="text">
-    <string>Nouveau</string>
+    <string>Nouveau...</string>
    </property>
    <property name="toolTip">
-    <string>Nouveau</string>
+    <string>Nouveau...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="actionSauvegarder">
+  <action name="actionEnregistrer">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/media/actions-icons/document-save.png</normaloff>:/media/actions-icons/document-save.png</iconset>
    </property>
    <property name="text">
-    <string>Sauvegarder</string>
+    <string>Enregistrer</string>
    </property>
    <property name="toolTip">
-    <string>Sauvegarder</string>
+    <string>Enregistrer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSauvegarder_Sous">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/media/actions-icons/document-save-as.png</normaloff>:/media/actions-icons/document-save-as.png</iconset>
-   </property>
-   <property name="text">
-    <string>Sauvegarder_Sous</string>
-   </property>
-   <property name="toolTip">
-    <string>Sauvegarder Sous</string>
-   </property>
-  </action>
-  <action name="actionFermer_Fenetre">
+  <action name="actionFermer">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/media/actions-icons/window-close.png</normaloff>:/media/actions-icons/window-close.png</iconset>
    </property>
    <property name="text">
-    <string>Fermer_Fenetre</string>
+    <string>Fermer</string>
    </property>
    <property name="toolTip">
-    <string>Fermer la fenetre</string>
+    <string>Fermer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="actionHelp">
-   <property name="icon">
-    <iconset theme="Help" resource="resources.qrc">
-     <normaloff>:/media/actions-icons/help-about.png</normaloff>:/media/actions-icons/help-about.png</iconset>
-   </property>
+  <action name="actionAbout">
    <property name="text">
-    <string>Help</string>
+    <string>À propos de FindMyWay - Creator</string>
    </property>
    <property name="toolTip">
-    <string>Help</string>
+    <string>À propos de FindMyWay - Creator</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionOuvrir">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/document-open.png</normaloff>:/media/actions-icons/document-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ouvrir...</string>
+   </property>
+   <property name="toolTip">
+    <string>Ouvrir...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionQuitter">
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+   <property name="toolTip">
+    <string>Quitter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionProprietes">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/document-properties.png</normaloff>:/media/actions-icons/document-properties.png</iconset>
+   </property>
+   <property name="text">
+    <string>Propriétés</string>
+   </property>
+   <property name="toolTip">
+    <string>Propriétés</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionModeCreation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/mode-creation.png</normaloff>:/media/actions-icons/mode-creation.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mode création</string>
+   </property>
+   <property name="toolTip">
+    <string>Mode création</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionModeLiaison">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/media/actions-icons/mode-link.png</normaloff>:/media/actions-icons/mode-link.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mode liaison</string>
+   </property>
+   <property name="toolTip">
+    <string>Mode liaison</string>
    </property>
   </action>
  </widget>

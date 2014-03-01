@@ -6,7 +6,7 @@
 class PathNode : public Node
 {
 public:
-    PathNode();
+    PathNode(Map *map, int x, int y, int type, QPixmap *img);
 };
 
 #endif // PATHNODE_H

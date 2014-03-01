@@ -1,10 +1,9 @@
 #ifndef DRAGWIDGET_H
 #define DRAGWIDGET_H
 
-#include <QToolBar>
+#include <QtGui>
+#include <QGridLayout>
 #include <QLabel>
-class QDragEnterEvent;
-class QDropEvent;
 
 class DragWidget : public QFrame
 {

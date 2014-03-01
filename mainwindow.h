@@ -1,27 +1,22 @@
 
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtCore/QMap>
-#include <QHBoxLayout>
-#include <QGraphicsView>
 #include <QSplitter>
+#include <QListWidget>
+#include <QScrollArea>
+
 #include "widgets/dragwidget.h"
-#include "widgets/listgraph.h"
-#include "graphicscene.h"
-#include "graphicview.h"
 
-QT_BEGIN_NAMESPACE
-class QAction;
-class QStatusBar;
-class QTabWidget;
-class ImageArea;
-class QLabel;
-class QTreeView;
+#include "dialog/projectsettingsdialog.h"
 
-QT_END_NAMESPACE
+#include <QGraphicsView>
+#include "graphicsscene.h"
+
+#include "core/map.h"
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -33,68 +28,41 @@ public:
     MainWindow(QStringList filePaths, QWidget *parent = 0);
     ~MainWindow();
 
+    int getCurrentIndex();
+
+    Map *getCurrentMap();
+    Map *getMap(int index);
+    bool hasCurrentMap();
+
+    bool saveMap(int index);
+
+    bool closeTab(int index);
+    bool closeAllTabs();
+    bool createNewTab(Map *map);
+
 protected:
     void closeEvent(QCloseEvent *event);
 
 private:
-    void initializeMainMenu();
-    void initializeStatusBar();
-    void initializeTabWidget();
-    void initializeDragbalWidget();
-    void initilizeSession();
-
-    bool initializeNewTab(const QString &filePath = "");
-
     Ui::MainWindow *ui;
 
-    ImageArea* getCurrentImageArea();
-    ImageArea* getImageAreaByIndex(int index);
+    QTabWidget *workspaceTab;
+    QListWidget * openFilesList;
 
-    bool closeAllTabs();
-    bool isSomethingModified();
-
-    QStatusBar *mStatusBar;
-    QTabWidget *mTabWidget;
-    QTabWidget *tabWidget1,*tabWidget2,*tabWidget3;
-    QTreeView *mSession;
-    QLayout *mlayout,*mprincipale;
-    QHBoxLayout *layout,*layout2;
-    DragWidget *drg1,*drg2,*drg3,*drg4,*drg5;
-    QLabel *mSizeLabel, *mPosLabel,*mColorPreviewLabel, *mColorRGBLabel;
-
-    QAction *mNewAction, *mOpenAction, *mSaveAction, *mSaveAsAction, *mCloseAction, *mExitAction, *mZoomInAction, *mZoomOutAction, *mAdvancedZoomAction, *mPropertiesAction, *mAboutAction, *mAboutQtAction;
-
-    QMenu *mToolsMenu;
-
-    QHBoxLayout *horizontalLayout;
-
-    ListGraph *treeView;
-    QSplitter *splitter,*splitter2;
-    QWidget *widget;
-    GraphicView *gr;
-    Graphicscene *sc;
-    DragWidget *componentsView;
-    QScrollArea *scrollArea;
+    bool creationMode;
 
 private slots:
-    void activateTab(const int &index);
-    void setNewSizeToSizeLabel(const QSize &size);
-    void setNewPosToPosLabel(const QPoint &pos);
-    void setCurrentPipetteColor(const QColor &color);
-    void newAct();
-    void openAct();
-    void helpAct();
-    void saveAct();
-    void saveAsAct();
-    void settingsAct();
-    void closeTabAct();
-    void closeTab(int index);
-
-    void enableActions(int index);
+    void enableActions();
 
     void on_actionNouveau_triggered();
-    void on_actionFermer_Fenetre_triggered();
-    void on_actionHelp_triggered();
+    void on_actionOuvrir_triggered();
+    void on_actionEnregistrer_triggered();
+    void on_actionFermer_triggered();
+    void on_actionQuitter_triggered();
+    void on_actionProprietes_triggered();
+    void on_actionAbout_triggered();
+    void on_actionModeCreation_toggled(bool value);
+    void on_actionModeLiaison_toggled(bool value);
 };
 
 #endif // MAINWINDOW_H

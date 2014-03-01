@@ -1,5 +1,6 @@
 #include "classroom.h"
 
-Classroom::Classroom()
+Classroom::Classroom(Map *map, int x, int y)
+    : FinalNode(map, x, y, 0, new QPixmap(""))
 {
 }

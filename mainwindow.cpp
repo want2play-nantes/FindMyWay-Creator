@@ -1,50 +1,45 @@
 #include "mainwindow.h"
-#include "imagearea.h"
 #include "ui_mainwindow.h"
 
-#include <QApplication>
-#include <QAction>
-#include <QMenu>
-#include <QMenuBar>
-#include <QMessageBox>
-#include <QScrollArea>
-#include <QLabel>
-#include <QtEvents>
-#include <QPainter>
-#include <QInputDialog>
-#include <QtCore/QTimer>
-#include <QtCore/QMap>
-#include "widgets/dragwidget.h"
-#include "dialog/projectsettingsdialog.h"
+#include "core/unmapmanagement.h"
+#include "core/nodes/classroom.h"
 
-
-MainWindow::MainWindow(QStringList filePaths, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QStringList filePaths, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), creationMode(true)
 {
     ui->setupUi(this);
 
-    // Icone de l'application
-    setWindowIcon(QIcon("://media/actions-icons/clear-gray.png"));
+    openFilesList = new QListWidget();
+    openFilesList->setSortingEnabled(true);
 
-    // Initialisation des menus
-    initializeMainMenu();
+    QTabWidget *leftTabWidget;
+    QTabWidget *rightTabWidget;
 
+    QScrollArea *scrollArea;
+    QSplitter *splitter;
 
+    splitter= new QSplitter(this);
+    ui->horizontalLayout->addWidget(splitter);
 
-    // Initialisation de la liste
-   // initilizeSession();
+    leftTabWidget = new QTabWidget;
+    leftTabWidget->setMaximumWidth(250);
+    leftTabWidget->addTab(openFilesList, QIcon(), "Fichiers ouverts");
+    splitter->addWidget(leftTabWidget);
 
-    // Initialisation des zones de drag & drop
-    initializeDragbalWidget();
+    workspaceTab = new QTabWidget;
+    workspaceTab->setTabsClosable(true);
+    workspaceTab->setMovable(true);
+    splitter->addWidget(workspaceTab);
 
-    horizontalLayout = new QHBoxLayout;
+    scrollArea = new QScrollArea;
+    scrollArea->setWidget(new DragWidget(this));
+    rightTabWidget = new QTabWidget;
+    rightTabWidget->setMinimumWidth(200);
+    rightTabWidget->setMaximumWidth(200);
+    rightTabWidget->addTab(scrollArea, QIcon(), "Elements");
 
-    setCentralWidget(this->centralWidget());
+    ui->horizontalLayout->addWidget(rightTabWidget);
 
-
-    // Initialisation des tabs
-    initializeTabWidget();
-
-
+    enableActions();
 }
 
 MainWindow::~MainWindow()
@@ -52,448 +47,202 @@ MainWindow::~MainWindow()
     
 }
 
-void MainWindow::initializeTabWidget()
+bool MainWindow::createNewTab(Map *map)
 {
-  /*  mTabWidget = new QTabWidget(this);
+    GraphicsScene *gs = new GraphicsScene(map);
+    QGraphicsView *gv = new QGraphicsView(gs);
 
-    mTabWidget->setUsesScrollButtons(true);
-    mTabWidget->setTabsClosable(true);
+    gv->setDragMode(QGraphicsView::RubberBandDrag);
+    gv->setStyleSheet("background-color:#999");
+    gv->setRenderHint(QPainter::Antialiasing);
+    gv->setCacheMode(QGraphicsView::CacheBackground);
 
-    mTabWidget->setMovable(true);
-    mTabWidget->setAcceptDrops(true);
+    workspaceTab->addTab(gv, QIcon(), map->getFileName());
+    workspaceTab->setCurrentIndex(workspaceTab->count()-1);
 
-    connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(activateTab(int)));
-    connect(mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(enableActions(int)));
-    connect(mTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    QListWidgetItem *item = new QListWidgetItem(map->getFileName());
+    openFilesList->addItem(item);
 
-    ui->scrollArea->setWidget(mTabWidget);
-*/
-    treeView = new ListGraph(this);
-
-    sc = new Graphicscene(":/plans/plans/10_14_00a.png");
-    gr = new GraphicView(sc);
-    gr->setEnabled(true);
-    gr->setDragMode(QGraphicsView::RubberBandDrag);
-
-    gr->show();
-
-    layout = new QHBoxLayout;
-    widget = new QWidget;
-    widget->setLayout(layout);
-
-    splitter= new QSplitter(this);
-    splitter2= new QSplitter(this);
-
-    tabWidget1= new QTabWidget;
-    tabWidget2= new QTabWidget;
-    tabWidget3= new QTabWidget;
-
-    tabWidget1->addTab(treeView,QIcon("://media/instruments-icons/rectangle.png"),"Projects");
-
-    QString str("10_14_01.png");
-    treeView->nouveau_liste_item(str);
-    splitter->addWidget(tabWidget1);
-
-    layout->addWidget(splitter,2);
-
-    tabWidget2->addTab(gr,QIcon("://media/instruments-icons/rectangle.png"),"Works area");
-
-    splitter2->addWidget(tabWidget2);
-
-    layout->addWidget(splitter2,8);
-
-
-
-    tabWidget3->addTab(scrollArea,QIcon("://media/instruments-icons/rectangle.png"),"Drag&drop");
-    layout->addWidget(tabWidget3,2);
-    setCentralWidget(widget);
-
-
+    return true;
 }
 
-bool MainWindow::initializeNewTab(const QString &filePath)
+int MainWindow::getCurrentIndex()
 {
-//<<<<<<< HEAD
- /*   if (filePath.isEmpty())
-        return;
-=======
-    if (filePath.isEmpty())
-        return false;
->>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
-
-    QString tabName(tr("Untitled Image"));
-
-    ImageArea *imageArea = new ImageArea(filePath, this);
-    tabName = imageArea->getFileName();
-   // sc = new Graphicscene(filePath);
-
-
-    QScrollArea * scrollArea = new QScrollArea();
-    scrollArea->setAttribute(Qt::WA_DeleteOnClose);
-    scrollArea->setBackgroundRole(QPalette::Dark);
-    scrollArea->setWidget(imageArea);
-   // treeView->nouveau_liste_item(filePath);
-    mTabWidget->addTab(scrollArea, filePath);
-    mTabWidget->setCurrentIndex(mTabWidget->count()-1);
-    /*QGraphicsView *qw = new QGraphicsView(this);
-    qw->setScene(sc);
-
-
-
-    setWindowTitle(QString("%1 - Find my way").arg(tabName));
-
-<<<<<<< HEAD
-    //treeView->nouveau_liste_item(tabName);
-
-*/
-
-//=======
-//   return true;
-//>>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
+    return workspaceTab->currentIndex();
 }
 
-void MainWindow::initializeMainMenu()
+bool MainWindow::hasCurrentMap()
 {
-    QMenu *fileMenu = menuBar()->addMenu(tr("&Fichier"));
+    return getCurrentIndex() != -1;
+}
+
+Map* MainWindow::getCurrentMap()
+{
+    return getMap(getCurrentIndex());
+}
+
+Map* MainWindow::getMap(int index)
+{
+    QGraphicsView * gv = (QGraphicsView*)workspaceTab->widget(index);
+    GraphicsScene * gs = (GraphicsScene*)gv->scene();
+
+    return gs->getMap();
+}
+
+bool MainWindow::closeTab(int index)
+{
+    Map * map = getCurrentMap();
+
+    if (map->getChanged())
     {
-        mNewAction = new QAction(tr("&Nouveau..."), this);
-        mNewAction->setShortcut(QKeySequence::New);
-        mNewAction->setIcon(QIcon::fromTheme("document-new", QIcon(":/media/actions-icons/document-new.png")));
-        mNewAction->setIconVisibleInMenu(true);
-        connect(mNewAction, SIGNAL(triggered()), this, SLOT(newAct()));
-        fileMenu->addAction(mNewAction);
+        QMessageBox msgBox;
+        msgBox.setText("Le document a été modifié.");
+        msgBox.setInformativeText("Voulez-vous enregistrer les changements ?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
 
-        mOpenAction = new QAction(tr("&Ouvrir..."), this);
-        mOpenAction->setShortcut(QKeySequence::Open);
-        mOpenAction->setIcon(QIcon::fromTheme("document-open", QIcon(":/media/actions-icons/document-open.png")));
-        mOpenAction->setIconVisibleInMenu(true);
-        connect(mOpenAction, SIGNAL(triggered()), this, SLOT(openAct()));
-        fileMenu->addAction(mOpenAction);
+        switch (ret) {
+        case QMessageBox::Save:
+            saveMap(index);
+            return true;
+            break;
 
-        mSaveAction = new QAction(tr("&Sauvegarder..."), this);
-        mSaveAction->setShortcut(QKeySequence::Save);
-        mSaveAction->setIcon(QIcon::fromTheme("document-save", QIcon(":/media/actions-icons/document-save.png")));
-        mSaveAction->setIconVisibleInMenu(true);
-        connect(mSaveAction, SIGNAL(triggered()), this, SLOT(saveAct()));
-        fileMenu->addAction(mSaveAction);
-
-        mSaveAsAction = new QAction(tr("Sauvegarder sous..."), this);
-        mSaveAsAction->setShortcut(QKeySequence::SaveAs);
-        mSaveAsAction->setIcon(QIcon::fromTheme("document-save-as", QIcon(":/media/actions-icons/document-save-as.png")));
-        mSaveAsAction->setIconVisibleInMenu(true);
-        connect(mSaveAsAction, SIGNAL(triggered()), this, SLOT(saveAsAct()));
-        fileMenu->addAction(mSaveAsAction);
-
-        mCloseAction = new QAction(tr("&Fermer"), this);
-        mCloseAction->setShortcut(QKeySequence::Close);
-        mCloseAction->setIcon(QIcon::fromTheme("window-close", QIcon(":/media/actions-icons/window-close.png")));
-        mCloseAction->setIconVisibleInMenu(true);
-        connect(mCloseAction, SIGNAL(triggered()), this, SLOT(closeTabAct()));
-        fileMenu->addAction(mCloseAction);
-
-        fileMenu->addSeparator();
-
-        mPropertiesAction = new QAction(tr("&Propriétés"), this);
-        mPropertiesAction->setShortcut(QKeySequence::Preferences);
-        mPropertiesAction->setIcon(QIcon::fromTheme("document-properties", QIcon(":/media/actions-icons/document-properties.png")));
-        mPropertiesAction->setIconVisibleInMenu(true);
-        connect(mPropertiesAction, SIGNAL(triggered()), this, SLOT(settingsAct()));
-        fileMenu->addAction(mPropertiesAction);
-
-        fileMenu->addSeparator();
-
-        mExitAction = new QAction(tr("&Quitter"), this);
-        mExitAction->setShortcut(QKeySequence::Quit);
-        mExitAction->setIcon(QIcon::fromTheme("application-exit", QIcon(":/media/actions-icons/application-exit.png")));
-        mExitAction->setIconVisibleInMenu(true);
-        connect(mExitAction, SIGNAL(triggered()), SLOT(close()));
-        fileMenu->addAction(mExitAction);
-    }
-
-    QMenu *aboutMenu = menuBar()->addMenu(tr("&A propos"));
-    {
-        mAboutAction = new QAction(tr("&About FindMyWay"), this);
-        mAboutAction->setShortcut(QKeySequence::HelpContents);
-        mAboutAction->setIcon(QIcon::fromTheme("help-about", QIcon(":/media/actions-icons/help-about.png")));
-        mAboutAction->setIconVisibleInMenu(true);
-        connect(mAboutAction, SIGNAL(triggered()), this, SLOT(helpAct()));
-        aboutMenu->addAction(mAboutAction);
-
-        mAboutQtAction = new QAction(tr("A propos de Qt"), this);
-        connect(mAboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-        aboutMenu->addAction(mAboutQtAction);
-    }
-}
-
-void MainWindow::initilizeSession(){
-
-    treeView = new ListGraph(ui->treeView);
-
-    treeView->setObjectName(QString::fromUtf8("treeView"));
-    treeView->setStyleSheet(QString::fromUtf8("border:none;"));
-}
-
-void MainWindow::initializeDragbalWidget()
-{
-
-    scrollArea = new QScrollArea;
-
-    //this->setAcceptDrops(true);
-    drg1 = new DragWidget(this);
-    scrollArea->setWidget(drg1);
-
-/*<<<<<<< HEAD
-
-
-=======
-    drg2 = new DragWidget(this);
-    drg3 = new DragWidget(this);
-    drg4 = new DragWidget(this);
-    drg5 = new DragWidget(this);
-
-    QLabel *boatIcon = new QLabel(this);
-    boatIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    boatIcon->move(0, 50);
-    boatIcon->show();
-    boatIcon->setAttribute(Qt::WA_DeleteOnClose);
-
-    QLabel *boatIcontext = new QLabel(this);
-    boatIcontext->show();
-    boatIcontext->move(0, 50);
-    boatIcontext->setText("salle");
-
-    QLabel *carIcon = new QLabel(this);
-    carIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    carIcon->move(0, 60);
-    carIcon->show();
-    carIcon->setAttribute(Qt::WA_DeleteOnClose);
-
-
-    QLabel *boatIcontext2 = new QLabel(this);
-    boatIcontext2->show();
-    boatIcontext2->move(0, 50);
-    boatIcontext2->setText("escalier");
-
-    QLabel *houseIcon = new QLabel(this);
-    houseIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    houseIcon->move(0, 150);
-    houseIcon->show();
-    houseIcon->setAttribute(Qt::WA_DeleteOnClose);
-
-    QLabel *boatIcontext3 = new QLabel(this);
-    boatIcontext3->show();
-    boatIcontext3->move(0, 150);
-    boatIcontext3->setText("porte");
-
-    QLabel *houseIcon2 = new QLabel(this);
-    houseIcon2->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    houseIcon2->move(0, 200);
-    houseIcon2->show();
-    houseIcon2->setAttribute(Qt::WA_DeleteOnClose);
-
-    QLabel *boatIcontext4 = new QLabel(this);
-    boatIcontext4->show();
-    boatIcontext4->move(0, 200);
-    boatIcontext4->setText("fenetre");
-
-    QLabel *houseIcon3 = new QLabel(this);
-    houseIcon3->setPixmap(QPixmap(":/logos/logos/salle.png"));
-    houseIcon3->move(0, 200);
-    houseIcon3->show();
-    houseIcon3->setAttribute(Qt::WA_DeleteOnClose);
-
-    QLabel *boatIcontext5 = new QLabel(this);
-    boatIcontext5->show();
-    boatIcontext5->move(0, 200);
-    boatIcontext5->setText("porte principale");
-
-    drg1->addWidget(boatIcon);
-    drg1->addWidget(boatIcontext);
-    ui->verticalLayout1->addWidget(drg1);
-    drg2->addWidget(carIcon);
-    drg2->addWidget(boatIcontext2);
-    ui->verticalLayout_2->addWidget(drg2);
-    drg3->addWidget(houseIcon);
-    drg3->addWidget(boatIcontext3);
-    ui->verticalLayout_3->addWidget(drg3);
-    drg4->addWidget(houseIcon2);
-    drg4->addWidget(boatIcontext4);
-    ui->verticalLayout_4->addWidget(drg4);
-    drg5->addWidget(houseIcon3);
-    drg5->addWidget(boatIcontext5);
-    ui->verticalLayout_5->addWidget(drg5);
-
-    // ui->verticalLayout->addWidget(drg);
-    // addToolBar(Qt::RightToolBarArea, drg);
->>>>>>> 4f0cc40705afde590a382a3adf494c9f05cb6894
-*/
-}
-
-ImageArea* MainWindow::getCurrentImageArea()
-{
-    if (mTabWidget->currentWidget()) {
-        QScrollArea *tempScrollArea = qobject_cast<QScrollArea*>(mTabWidget->currentWidget());
-        ImageArea *tempArea = qobject_cast<ImageArea*>(tempScrollArea->widget());
-        return tempArea;
-    }
-    return NULL;
-}
-
-ImageArea* MainWindow::getImageAreaByIndex(int index)
-{
-    QScrollArea *sa = static_cast<QScrollArea*>(mTabWidget->widget(index));
-    ImageArea *ia = static_cast<ImageArea*>(sa->widget());
-    return ia;
-}
-
-void MainWindow::activateTab(const int &index)
-{
-    if(index == -1)
-        return;
-
-    mTabWidget->setCurrentIndex(index);
-
-    if(!getCurrentImageArea()->getFileName().isEmpty())
-    {
-        setWindowTitle(QString("%1 - FindMyWay").arg(getCurrentImageArea()->getFileName()));
-    }
-    else
-    {
-        setWindowTitle(QString("%1 - FindMyWay").arg(tr("Untitled Image")));
-    }
-}
-
-void MainWindow::setNewSizeToSizeLabel(const QSize &size)
-{
-    mSizeLabel->setText(QString("%1 x %2").arg(size.width()).arg(size.height()));
-}
-
-void MainWindow::setNewPosToPosLabel(const QPoint &pos)
-{
-    mPosLabel->setText(QString("%1,%2").arg(pos.x()).arg(pos.y()));
-}
-
-void MainWindow::setCurrentPipetteColor(const QColor &color)
-{
-    mColorRGBLabel->setText(QString("RGB: %1,%2,%3").arg(color.red())
-                            .arg(color.green()).arg(color.blue()));
-
-    QPixmap statusColorPixmap = QPixmap(10, 10);
-    QPainter statusColorPainter;
-    statusColorPainter.begin(&statusColorPixmap);
-    statusColorPainter.fillRect(0, 0, 15, 15, color);
-    statusColorPainter.end();
-    mColorPreviewLabel->setPixmap(statusColorPixmap);
-}
-
-void MainWindow::newAct()
-{
-    /*
-     * Lancement de la fenêtre Nouveau projet
-     * Création d'un objet Map
-     * Ouverture d'un nouvel onglet + zone de travail
-     * Affichage de l'image
-     */
-
-    ProjectSettingsDialog projectSettingsDialog(this);
-
-    if (projectSettingsDialog.exec() == QDialog::Accepted)
-    {
-        if (initializeNewTab(projectSettingsDialog.getMapPath()))
-        {
-            treeView->addItem(getCurrentImageArea()->getFileName());
-        }
-
-       // sc->setLayerFile(projectSettingsDialog.getFileName());
-
-
-        //mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-
-        //QMessageBox msgBox;
-        //msgBox.setText("Création d'un nouveau fichier avec les informations entrées.");
-        //msgBox.exec();
-    }
-}
-
-void MainWindow::openAct()
-{
-    /*
-     * Chargement de l'objet Map
-     */
-
-    //initializeNewTab(true);
-}
-
-void MainWindow::saveAct()
-{
-    getCurrentImageArea()->save();
-    mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-    treeView->addItem(getCurrentImageArea()->getFileName());
-
-}
-
-void MainWindow::saveAsAct()
-{
-    getCurrentImageArea()->saveAs();
-    mTabWidget->setTabText(mTabWidget->currentIndex(), getCurrentImageArea()->getFileName().isEmpty() ? tr("Untitled Image") : getCurrentImageArea()->getFileName() );
-}
-
-void MainWindow::settingsAct()
-{
-    /*
-     * Ouvre un ProjectSettingsDialog en mode édition
-     */
-    ProjectSettingsDialog projectSettingsDialog(this);
-    projectSettingsDialog.setEditable(false);
-
-    if (projectSettingsDialog.exec() == QDialog::Accepted)
-    {
-        if (initializeNewTab(projectSettingsDialog.getMapPath()))
-        {
-            // Modifier objet Map
-        }
-    }
-}
-
-void MainWindow::closeTabAct()
-{
-    closeTab(mTabWidget->currentIndex());
-}
-
-void MainWindow::closeTab(int index)
-{
-    ImageArea *ia = getImageAreaByIndex(index);
-    if(ia->getEdited())
-    {
-        int ans = QMessageBox::warning(this, tr("Closing Tab..."),
-                                       tr("File has been modified.\nDo you want to save changes?"),
-                                       QMessageBox::Yes | QMessageBox::Default,
-                                       QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
-        switch(ans)
-        {
-        case QMessageBox::Yes:
-            if (ia->save())
-                break;
-            return;
         case QMessageBox::Cancel:
-            return;
+            return false;
+
+        default:
+            break;
         }
     }
 
-    QWidget *wid = mTabWidget->widget(index);
-    mTabWidget->removeTab(index);
+    workspaceTab->removeTab(index);
 
-    delete wid;
 
-    if (mTabWidget->count() == 0)
+    // TODO : Doit être améliorer (peut supprimer 2 fichiers de la liste en même temps)
+
+    bool foundItem = false;
+    int i = 0;
+
+    while (i < openFilesList->count() || !foundItem)
     {
-        setWindowTitle("Empty - Find my way");
+        if (openFilesList->item(i)->text() == map->getFileName())
+        {
+            QListWidgetItem *item = openFilesList->takeItem(i);
+            delete item;
+            foundItem = true;
+        }
+        i++;
     }
+
+    return true;
+}
+
+bool MainWindow::closeAllTabs()
+{
+    for (int i = 0; i < workspaceTab->count(); i++)
+    {
+        if (!closeTab(i))
+            return false;
+    }
+
+    return true;
+}
+
+void MainWindow::enableActions()
+{
+    bool isEnable = (getCurrentIndex() != -1);
+
+    ui->actionEnregistrer->setEnabled(isEnable);
+    ui->actionFermer->setEnabled(isEnable);
+    ui->actionProprietes->setEnabled(isEnable);
+}
+
+void MainWindow::on_actionNouveau_triggered()
+{
+    ProjectSettingsDialog psd(this);
+
+    if (psd.exec() == QDialog::Accepted)
+    {
+        QPixmap *img = new QPixmap(psd.getMapPath());
+        Map *m = new Map(img, psd.getFileName(), psd.getUfrRef(), psd.getBuilding(), psd.getFloor(), psd.getPart());
+
+        /*
+         * Test
+         */
+
+        // Création des noeuds
+        Node * n1 = new Classroom(m, 20, 20);
+        Node * n2 = new Classroom(m, 40, 25);
+        Node * n3 = new Classroom(m, 25, 17);
+        Node * n4 = new Classroom(m, 5, 2);
+
+        // Liaisons des noeuds
+        n1->link(n2, 5);
+        n1->link(n3, 7);
+        n2->link(n3, 8);
+        n2->link(n4, 11);
+        n3->link(n4, 5);
+        n1->link(n4, 18);
+
+        /*
+         * Fin test
+         */
+
+        createNewTab(m);
+    }
+    enableActions();
+}
+
+void MainWindow::on_actionOuvrir_triggered()
+{
+    QFileDialog dialog(this, tr("Ouvrir"), QDir::home().absolutePath(),tr("Fichier Unmap (*.unmap)"));
+    dialog.setFileMode(QFileDialog::ExistingFile);
+
+    if (dialog.exec())
+    {
+        QStringList selectedFiles = dialog.selectedFiles();
+        if (!selectedFiles.isEmpty())
+        {
+            Map *map = UnmapManagement::openMap(selectedFiles.takeFirst());
+            createNewTab(map);
+        }
+        enableActions();
+    }
+}
+
+void MainWindow::on_actionEnregistrer_triggered()
+{
+    saveMap(getCurrentIndex());
+}
+
+void MainWindow::on_actionFermer_triggered()
+{
+    closeTab(getCurrentIndex());
+
+    enableActions();
+}
+
+void MainWindow::on_actionQuitter_triggered()
+{
+    close();
+}
+
+void MainWindow::on_actionProprietes_triggered()
+{
+    ProjectSettingsDialog psd(this);
+    psd.setEditable(getCurrentMap());
+    psd.exec();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QMessageBox::about(this, tr("À propos de FindMyWay - Creator"), QString("Application développé lors d'un projet d'Interface Homme-Machine de M1 ALMA à l'université de Nantes"));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(!isSomethingModified() || closeAllTabs())
+    if(closeAllTabs())
     {
         event->accept();
     }
@@ -501,74 +250,41 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore();
 }
 
-bool MainWindow::isSomethingModified()
+bool MainWindow::saveMap(int index)
 {
-    /*for(int i = 0; i < mTabWidget->count(); ++i)
-    {
-        if(getImageAreaByIndex(i)->getEdited())
-            return true;
-    }
-    return false;*/
-}
+    Map * map = getMap(index);
 
-bool MainWindow::closeAllTabs()
-{
+    if (!map->getChanged())
+        return true;
 
-    while(mTabWidget->count() != 0)
-    {
-        ImageArea *ia = getImageAreaByIndex(0);
-        if(ia->getEdited())
-        {
-            int ans = QMessageBox::warning(this, tr("Closing Tab..."),
-                                           tr("File has been modified.\nDo you want to save changes?"),
-                                           QMessageBox::Yes | QMessageBox::Default,
-                                           QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
-            switch(ans)
+    if (map->getFilePath().isEmpty()) {
+        QFileDialog dialog(this, tr("Enregistrer"), QDir::home().absolutePath());
+        dialog.setFileMode(QFileDialog::Directory);
+        dialog.setOption(QFileDialog::ShowDirsOnly);
+
+        if (dialog.exec()) {
+            QStringList selectedFiles = dialog.selectedFiles();
+            if (!selectedFiles.isEmpty())
             {
-            case QMessageBox::Yes:
-                if (ia->save())
-                    break;
-                return false;
-            case QMessageBox::Cancel:
-                return false;
+                return map->save(selectedFiles.takeFirst());
             }
         }
-        QWidget *wid = mTabWidget->widget(0);
-        mTabWidget->removeTab(0);
-        delete wid;
     }
-    return true;
+    else {
+        return map->save();
+    }
+
+    return false;
 }
 
-void MainWindow::enableActions(int index)
+void MainWindow::on_actionModeCreation_toggled(bool value)
 {
-    //if index == -1 it means, that there is no tabs
-    bool isEnable = index == -1 ? false : true;
-
-    mSaveAction->setEnabled(isEnable);
-    mSaveAsAction->setEnabled(isEnable);
-    mCloseAction->setEnabled(isEnable);
+    ui->actionModeLiaison->setChecked(!ui->actionModeCreation->isChecked());
+    creationMode = true;
 }
 
-void MainWindow::helpAct()
+void MainWindow::on_actionModeLiaison_toggled(bool value)
 {
-    QMessageBox::about(this, tr("About Find My Way"),
-                       QString("Project IHM M1 ALMA")
-                       .arg(tr("version")).arg("0.1.0").arg(tr("Site")).arg(tr("Authors"))
-                       .arg(tr("If you like <b>FindMyWay</b> and you want to share your opinion, or send a bug report, or want to suggest new features, we are waiting for you on our <a>arafet.ferdjani@gmail.com</a>.")));
-}
-
-void MainWindow::on_actionNouveau_triggered()
-{
-    newAct();
-}
-
-void MainWindow::on_actionFermer_Fenetre_triggered()
-{
-    sc->deleteComponents();
-}
-
-void MainWindow::on_actionHelp_triggered()
-{
-    helpAct();
+    ui->actionModeCreation->setChecked(!ui->actionModeLiaison->isChecked());
+    creationMode = false;
 }

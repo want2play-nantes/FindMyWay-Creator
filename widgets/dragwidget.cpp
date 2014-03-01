@@ -1,93 +1,56 @@
-#include <QtGui>
 
 #include "dragwidget.h"
-#include<QVBoxLayout>
 
-
-DragWidget::DragWidget(QWidget *parent)
-    : QFrame(parent)
+DragWidget::DragWidget(QWidget *parent) : QFrame(parent)
 {
-#if defined(Q_OS_SYMBIAN) || defined(Q_WS_MAEMO_5) || defined(Q_WS_SIMULATOR)
-#else
-    //setMinimumSize(150, 500);
-#endif
-    //setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     setAcceptDrops(false);
-    QVBoxLayout *conteneur = new QVBoxLayout;
 
-    QLabel *boatIcon = new QLabel(this);
-        boatIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
-        boatIcon->move(0, 50);
-        boatIcon->show();
-        boatIcon->setAttribute(Qt::WA_DeleteOnClose);
+    QGridLayout *gridLayout = new QGridLayout;
 
-        QLabel *boatIcontext = new QLabel(this);
-        boatIcontext->show();
-        boatIcontext->move(0, 50);
-        boatIcontext->setText("salle");
+    QLabel *classroomIcon = new QLabel(this);
+    classroomIcon->setPixmap(QPixmap(":/logos/logos/salle.png"));
+    QLabel *classroomLabel = new QLabel("Salle de cours", this);
 
-        QLabel *carIcon = new QLabel(this);
-        carIcon->setPixmap(QPixmap(":/logos/logos/escalier.png"));
-        carIcon->move(0, 60);
-        carIcon->show();
-        carIcon->setAttribute(Qt::WA_DeleteOnClose);
+    QLabel *stairsIcon = new QLabel(this);
+    stairsIcon->setPixmap(QPixmap(":/logos/logos/escalier.png"));
+    QLabel *stairsLabel = new QLabel("Escalier", this);
 
+    QLabel *doorIcon = new QLabel(this);
+    doorIcon->setPixmap(QPixmap(":/logos/logos/porte.png"));
+    QLabel *doorLabel = new QLabel("Porte", this);
 
-        QLabel *boatIcontext2 = new QLabel(this);
-        boatIcontext2->show();
-        boatIcontext2->move(0, 50);
-        boatIcontext2->setText("escalier");
+    QLabel *elevatorIcon = new QLabel(this);
+    elevatorIcon->setPixmap(QPixmap(":/logos/logos/ascenseur.png"));
+    QLabel *elevatorLabel = new QLabel("Ascenseur", this);
 
-        QLabel *houseIcon = new QLabel(this);
-        houseIcon->setPixmap(QPixmap(":/logos/logos/porte.png"));
-        houseIcon->move(0, 150);
-        houseIcon->show();
-        houseIcon->setAttribute(Qt::WA_DeleteOnClose);
-
-        QLabel *boatIcontext3 = new QLabel(this);
-        boatIcontext3->show();
-        boatIcontext3->move(0, 150);
-        boatIcontext3->setText("porte");
-
-        QLabel *houseIcon2 = new QLabel(this);
-        houseIcon2->setPixmap(QPixmap(":/logos/logos/ascenseur.png"));
-        houseIcon2->move(0, 200);
-        houseIcon2->show();
-        houseIcon2->setAttribute(Qt::WA_DeleteOnClose);
-
-        QLabel *boatIcontext4 = new QLabel(this);
-        boatIcontext4->show();
-        boatIcontext4->move(0, 200);
-        boatIcontext4->setText("Ascenseur");
-
-        QLabel *houseIcon3 = new QLabel(this);
-        houseIcon3->setPixmap(QPixmap(":/logos/logos/portePrin.png"));
-        houseIcon3->move(0, 200);
-        houseIcon3->show();
-        houseIcon3->setAttribute(Qt::WA_DeleteOnClose);
-
-        QLabel *boatIcontext5 = new QLabel(this);
-        boatIcontext5->show();
-        boatIcontext5->move(0, 200);
-        boatIcontext5->setText("porte principale");
+    QLabel *mainDoorIcon = new QLabel(this);
+    mainDoorIcon->setPixmap(QPixmap(":/logos/logos/portePrin.png"));
+    QLabel *mainDoorLabel = new QLabel("Porte principale", this);
 
 
-        conteneur->addWidget(boatIcon,0,0);
-        conteneur->addWidget(boatIcontext);
-        conteneur->addWidget(carIcon);
-        conteneur->addWidget(boatIcontext2);
-        conteneur->addWidget(houseIcon);
-        conteneur->addWidget(boatIcontext3);
-        conteneur->addWidget(houseIcon2);
-        conteneur->addWidget(boatIcontext4);
-        conteneur->addWidget(houseIcon3);
-        conteneur->addWidget(boatIcontext5);
-         this->setLayout(conteneur);
+    gridLayout->addWidget(classroomIcon, 0, 0);
+    gridLayout->addWidget(classroomLabel, 0, 1);
+
+    gridLayout->addWidget(stairsIcon, 1, 0);
+    gridLayout->addWidget(stairsLabel, 1, 1);
+
+    gridLayout->addWidget(doorIcon, 2, 0);
+    gridLayout->addWidget(doorLabel, 2, 1);
+
+    gridLayout->addWidget(elevatorIcon, 3, 0);
+    gridLayout->addWidget(elevatorLabel, 3, 1);
+
+    gridLayout->addWidget(mainDoorIcon, 4, 0);
+    gridLayout->addWidget(mainDoorLabel, 4, 1);
+
+    setLayout(gridLayout);
 
 }
 
 void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 {
+    qDebug()<<"dragEnterEvent";
+
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -102,6 +65,8 @@ void DragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void DragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
+    qDebug()<<"dragMoveEvent";
+
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -116,12 +81,14 @@ void DragWidget::dragMoveEvent(QDragMoveEvent *event)
 
 void DragWidget::dropEvent(QDropEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+    if (event->mimeData()->hasFormat("application/x-dnditemdata"))
+    {
         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
         QPixmap pixmap;
         QPoint offset;
+
         dataStream >> pixmap >> offset;
 
         QLabel *newIcon = new QLabel(this);
@@ -133,10 +100,12 @@ void DragWidget::dropEvent(QDropEvent *event)
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
             event->accept();
-        } else {
+        }
+        else {
             event->acceptProposedAction();
         }
-    } else {
+    }
+    else {
         event->ignore();
     }
 }
@@ -144,12 +113,12 @@ void DragWidget::dropEvent(QDropEvent *event)
 void DragWidget::mousePressEvent(QMouseEvent *event)
 {
     QLabel *child = static_cast<QLabel*>(childAt(event->pos()));
-    if (!child)
+    if (!child || !child->pixmap())
         return;
 
     QPixmap pixmap = *child->pixmap();
-
     QByteArray itemData;
+
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
     dataStream << pixmap << QPoint(event->pos() - child->pos());
 

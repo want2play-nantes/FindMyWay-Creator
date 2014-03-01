@@ -6,7 +6,7 @@
 class FinalNode : public Node
 {
 public:
-    FinalNode();
+    FinalNode(Map *map, int x, int y, int type, QPixmap *img);
 };
 
 #endif // FINALNODE_H

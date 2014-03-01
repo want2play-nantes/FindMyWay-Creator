@@ -1,140 +1,105 @@
+
 #include "map.h"
+#include "unmapmanagement.h"
 
-#include <QMessageBox>
-
-static QString FileExt = QString("unmap");
-
-Map::Map(QPixmap &img, QString fileName, int ufrRef, int building, int floor, int part) :
+Map::Map (QPixmap *img, QString fileName, int ufrRef, int building, int floor, int part) :
     img(img),
     fileName(fileName),
     ufrRef(ufrRef),
     building(building),
     floor(floor),
-    part(part)
+    part(part),
+    changed(true),
+    currentNodeId(0),
+    loading(false)
 {
-
+    nodes = new QList<Node*>();
+    links = new QList<Link*>();
 }
 
-bool Map::save(QString folderPath)
+// Getters et Setters
+
+QPixmap* Map::getImg() const { return img; }
+
+void Map::setImg(QPixmap *value) { img = value; }
+
+int Map::getPart() const { return part; }
+void Map::setPart(int value) { part = value; }
+
+int Map::getFloor() const { return floor; }
+void Map::setFloor(int value) { floor = value; }
+
+int Map::getBuilding() const { return building; }
+void Map::setBuilding(int value) { building = value; }
+
+int Map::getUfrRef() const { return ufrRef; }
+void Map::setUfrRef(int value) { ufrRef = value; }
+
+QString Map::getFilePath() const { return filePath; }
+void Map::setFilePath(QString value) { filePath = value; }
+
+QString Map::getFileName() const { return fileName; }
+void Map::setFileName(const QString &value) { fileName = value; }
+
+bool Map::getChanged() const { return changed; }
+void Map::setChanged(bool value) { changed = value; }
+
+int Map::getCurrentNodeId() const { return currentNodeId; }
+void Map::setCurrentNodeId(int value) { currentNodeId = value; }
+
+QList<Node *> *Map::getNodes() const { return nodes; }
+QList<Link *> *Map::getLinks() const { return links; }
+
+bool Map::getLoading() const { return loading; }
+void Map::setLoading(bool value) { loading = value; }
+
+void Map::addNode(Node *node)
 {
-    QDir dir(QString(QDir::tempPath()));
-    dir.mkdir(fileName);
+    nodes->append(node);
 
-    QDomDocument *datas = createXml();
+    if (!loading) {
+        node->setId(currentNodeId);
+        currentNodeId++;
+        changed = true;
+    }
+}
 
-    QFile dataFile(QString(QDir::tempPath() + "/" + fileName + "/data.xml"));
-    QFile imgFile(QString(QDir::tempPath() + "/" + fileName + "/map.png"));
+void Map::addEdge(Link *edge)
+{
+    links->append(edge);
 
-    bool allFilesCreated = false;
-    int result;
+    if (!loading) {
+        changed = true;
+    }
+}
 
-    if(dataFile.open(QIODevice::WriteOnly))
+Node * Map::getNodeById(int id)
+{
+    for (int i = 0; i < nodes->count(); i++)
     {
-        QTextStream ts(&dataFile);
+        if (((Node*)nodes->value(i))->getId() == id)
+            return nodes->value(i);
+    }
 
-        datas->save(ts, 4);
+    return 0;
+}
 
-        dataFile.close();
-
-        if (imgFile.open(QIODevice::WriteOnly))
+/**
+ * @brief Map::save Sauvegarde la map dans un fichier *.unmap en incluant les nodes et les liaisons
+ * @param folderPath
+ * @return
+ */
+bool Map::save(QString path)
+{
+    if (changed || filePath.isEmpty() || !QFile(filePath).exists())
+    {
+        if (filePath.isEmpty())
         {
-            img.save(&imgFile, "PNG");
-            imgFile.close();
-
-            allFilesCreated = true;
+            changed = !(UnmapManagement::saveMap(this, path));
         }
         else {
-            dataFile.remove();
-            imgFile.remove();
+            changed = !(UnmapManagement::saveMap(this, filePath));
         }
     }
-    else {
-        dataFile.remove();
-    }
-
-    // Création du fichier *.unmap
-    if(allFilesCreated)
-    {
-        QString command("cd " + QDir::tempPath() + "/" + fileName + "; tar -zcvf "+ (!(filePath.isEmpty()) ? filePath : folderPath) + "/" + fileName + "." + FileExt + " *");
-        result = system(command.toStdString().c_str());
-    }
-
-    dir.removeRecursively();
-
-    return (result == 0);
+    return changed;
 }
-
-bool Map::open()
-{
-
-
-    return false;
-}
-
-QDomDocument * Map::createXml()
-{
-    QDomDocument *datas = new QDomDocument(fileName);
-
-    QDomNode xmlNode = datas->createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
-    datas->insertBefore(xmlNode, datas->firstChild());
-
-    QDomElement root = datas->createElement("map");
-    datas->appendChild(root);
-
-    // Properties
-
-    QDomElement properties = datas->createElement("properties");
-    root.appendChild(properties);
-
-    QDomElement nameElement = datas->createElement("name");
-    properties.appendChild(nameElement);
-
-    QDomText nameText = datas->createTextNode(fileName);
-    nameElement.appendChild(nameText);
-
-    QDomElement ufrRefElement = datas->createElement("ufr");
-    properties.appendChild(ufrRefElement);
-
-    QDomText ufrRefText = datas->createTextNode(QString::number(ufrRef));
-    ufrRefElement.appendChild(ufrRefText);
-
-    QDomElement buildingElement = datas->createElement("building");
-    properties.appendChild(buildingElement);
-
-    QDomText buildingText = datas->createTextNode(QString::number(building));
-    buildingElement.appendChild(buildingText);
-
-    QDomElement floorElement = datas->createElement("floor");
-    properties.appendChild(floorElement);
-
-    QDomText floorText = datas->createTextNode(QString::number(floor));
-    floorElement.appendChild(floorText);
-
-    QDomElement partElement = datas->createElement("part");
-    properties.appendChild(partElement);
-
-    QDomText partText = datas->createTextNode(QString::number(part));
-    partElement.appendChild(partText);
-
-    // Graph
-
-    QDomElement graph = datas->createElement("graph");
-    root.appendChild(graph);
-
-    // Nodes
-
-    QDomElement nodes = datas->createElement("nodes");
-    graph.appendChild(nodes);
-
-
-
-    // Edges
-
-    QDomElement edges = datas->createElement("edges");
-    graph.appendChild(edges);
-
-
-
-    return datas;
-}
-
